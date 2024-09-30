@@ -1,0 +1,13 @@
+/* footer.css */
+.footer {
+    background-color: #191970;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    font-family:'M PLUS Code Latin', sans-serif;
+  }
+  
+  .footer-content {
+    font-size: 1rem;
+  }
+  

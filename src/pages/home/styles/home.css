@@ -1,0 +1,92 @@
+.home-container {
+  position: relative;
+  padding: 20px;
+  background-color: white;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.stellar-logo {
+  width: 50px;
+  height: auto;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #4255FF;
+  text-align: left;
+  margin-left: 1rem;
+  text-transform: uppercase;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.highlight-quiz {
+  color: #1F61E0;
+  text-decoration: underline;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.highlight-skills {
+  color: #191970;
+  font-weight: bold;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.hero-image {
+  width: 150px;
+  height: auto;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.navigation {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 40px 0;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.content .hover-text {
+  background-color: #4255FF;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.long-star, .wide-star {
+  position: absolute;
+  pointer-events: none;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.long-star {
+  transform: rotate(45deg);
+  height: 148.07px;
+  width: 150.07px;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+
+.wide-star {
+  transform: rotate(135deg);
+  height: 107px;
+  width: 107px;
+  font-family: 'M PLUS Code Latin', sans-serif;
+}

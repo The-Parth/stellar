@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
+import Home from './pages/home/home';
 
 
 const App = () => {
@@ -14,9 +14,10 @@ const App = () => {
       <div>
         {/* Define your routes */}
         <Routes>
-          <Route path="/" element={<><div>HII</div></>}/>
+          <Route path="/" element={<><div></div></>}/>
           <Route path="/login" element={<Login />} />
         </Routes>
+        <Home />
       </div>
     </Router>
 
