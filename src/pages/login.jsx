@@ -56,7 +56,7 @@ function Login(){
         <>
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 logreg-page">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h1 className="text-center text-2xl font-bold leading-9 tracking-tight text-blue-500" style={{fontSize: "2rem"}}>AgroShield</h1>
+                    <h1 className="text-center text-2xl font-bold leading-9 tracking-tight text-blue-500" style={{fontSize: "2rem"}}>Stellar</h1>
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 ">Sign in to your account</h2>
                 </div>
 

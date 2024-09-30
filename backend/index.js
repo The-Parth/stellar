@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 
 // Middleware
 import authenticateUser from './Authentication.js';
+import connectDB from './db.js'; // Import the MongoDB connection
 
 // Routes
 import user from './routes/user.js';
@@ -21,10 +22,24 @@ app.use(authenticateUser);
 app.use('/user', user);
 
 
+const startServer = async () => {
+    try {
+        // Connect to MongoDB
+        await connectDB();
+
+        // Start the Express server
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    } catch (error) {
+        console.error("Failed to start server", error);
+    }
+};
+
+
+
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+startServer();
