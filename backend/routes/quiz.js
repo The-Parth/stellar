@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
 import express from "express";
 
-import Quiz from "../models/Quiz.js";
-import router from "./user.js";
-
-router = express.Router();
+const router = express.Router();
 
 router.get("/", async (res, req) => {
     res.send("Quiz route");

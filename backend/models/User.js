@@ -1,39 +1,27 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-const UserSchema = new mongoose.Schema({
-    uid: {
-        type: String,
-        required: true,
-        unique: true
-    }, // Firebase UID
-
-    email: {
-        type: String,
-        required: true,
-        unique: true
+const userSchema = new Schema({
+    name:{
+        type:String,
+        require:true
     },
-
-    name: {
-        type: String,
-        required: true
+    email:{
+        type:String,
+        require:true,
+        unique:true
     },
-
-    photoURL: {
-        type: String,
+    password:{
+        type:String,
+        require:true
     },
-
-    createdAt: {
-        type: Date,
-        default: Date.now
+    date:{
+        type:Date,
+        default:Date.now
     },
-
-    role: {
-        type: String,
-        default: "user", // can be admin
-    }
 
 });
-
-const User = mongoose.model("User", UserSchema);
+const User =mongoose.model('user',userSchema);
+User.createIndexes();
 
 export default User;
