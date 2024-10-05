@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import { backendUrl } from "../../config";
+
 
 function Signup() {
     const [name, setName] = useState("");
@@ -20,7 +22,7 @@ function Signup() {
         }
         try {
             // Replace with your signup API endpoint
-            const response = await axios.post("/api/register", {
+            const response = await axios.post(`${backendUrl}/api/auth/register`, {
                 name,
                 email,
                 username,

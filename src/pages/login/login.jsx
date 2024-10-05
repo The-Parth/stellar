@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { backendUrl } from "../../config";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -12,7 +13,10 @@ function Login() {
         e.preventDefault();
         try {
             // Replace with your login API endpoint
-            const response = await axios.post("/api/login", { email, password });
+            console.log("Logging in...");
+            console.log("Email: ", email);
+            console.log("Password", password);
+            const response = await axios.post(`${backendUrl}/api/auth/login`, { email, password });
             if (response.data.success) {
                 navigate("/dashboard");
             } else {

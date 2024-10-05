@@ -5,7 +5,14 @@ dotenv.config();
 const URI = process.env.ATLAS_URI;
 
 const connectToMongo = async () => {
-    await mongoose.connect(URI);
+    // remove ssl warning
+    await mongoose.connect(URI, 
+        {
+            ssl: true,
+        }
+    );
+
+
     console.log("Connected to Database");
 };
 

@@ -9,12 +9,14 @@ import { body, validationResult } from "express-validator";
 
 const router = express.Router();
 
+// Route:1 Register Route
 router.post(
-    "/createUser",
+    "/register",
     [
         body("name").isLength({ min: 3 }),
         body("email").isEmail(),
-        body("password").isLength({ min: 3 }),
+        body("username").isLength({ min: 3 }),
+        body("password").isLength({ min: 6 }),
     ],
     async (req, res) => {
         const success = false;
@@ -26,17 +28,16 @@ router.post(
         try {
             let user = await User.findOne({ email: req.body.email });
             if (user) {
-                return res
-                    .status(400)
-                    .json({
-                        success,
-                        Error: "User with this email already exist",
-                    });
+                return res.status(400).json({
+                    success,
+                    Error: "User with this email already exist",
+                });
             }
             // Creating User
             const salt = await bcrypt.genSalt(10);
             let secPass = await bcrypt.hash(req.body.password, salt);
             user = await User.create({
+                username: req.body.username,
                 name: req.body.name,
                 password: secPass,
                 email: req.body.email,
@@ -52,6 +53,7 @@ router.post(
     }
 );
 
+// Route:2 Login Route
 router.post(
     "/login",
     [body("email").isEmail(), body("password").exists()],
@@ -65,21 +67,17 @@ router.post(
             let success = false;
             let user = await User.findOne({ email });
             if (!user) {
-                return res
-                    .status(400)
-                    .json({
-                        success,
-                        error: "Please login with appropriate credentials",
-                    });
+                return res.status(400).json({
+                    success,
+                    error: "Please login with appropriate credentials",
+                });
             }
             const comPassword = await bcrypt.compare(password, user.password);
             if (!comPassword) {
-                return res
-                    .status(400)
-                    .json({
-                        success,
-                        error: "Please login with appropriate credentials",
-                    });
+                return res.status(400).json({
+                    success,
+                    error: "Please login with appropriate credentials",
+                });
             }
             const data = {
                 id: user.id,

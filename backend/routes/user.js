@@ -13,10 +13,13 @@ router.get("/", async (req, res) => {
 
 
 router.post("/login", async (req, res) => {
-    const { email, uid } = req.body;
+    const { email, password } = req.body;
 
     try {
         let user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
         console.log(req.body);
         if (!user) {
             console.log("User not found, creating new user");

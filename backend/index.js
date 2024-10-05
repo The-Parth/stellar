@@ -3,9 +3,9 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import connectToMongo from "./db.js";
 
-import auth from "./Routes/auth.js";
-import user from "./Routes/user.js";
-import quiz from "./Routes/quiz.js";
+import auth from "./routes/auth.js";
+import user from "./routes/user.js";
+import quiz from "./routes/quiz.js";
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-const Port = 5000;
+const Port = 3000;
 
 connectToMongo();
 
