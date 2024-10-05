@@ -93,6 +93,7 @@ router.post(
 //  Route:3 To get user details using from Token
 
 router.post("/getuser", fetchUser, async (req, res) => {
+    console.log("Get User");
     try {
         const userId = req.user.id;
         const user = await User.findById(userId).select("-password");
