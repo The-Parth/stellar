@@ -107,7 +107,8 @@ const Dashboard = () => {
         };
         
         saveUser().then(() => {
-            setIsEditing(false);
+            // reload the page
+            window.location.reload();
         });
     };
 
