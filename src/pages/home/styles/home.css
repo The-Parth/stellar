@@ -55,14 +55,6 @@
   font-family: 'M PLUS Code Latin', sans-serif;
 }
 
-.content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin: 40px 0;
-  font-family: 'M PLUS Code Latin', sans-serif;
-}
-
 .content .hover-text {
   background-color: #4255FF;
   color: white;
@@ -89,4 +81,23 @@
   height: 107px;
   width: 107px;
   font-family: 'M PLUS Code Latin', sans-serif;
+}
+.titleHeroParent{
+  position: relative;
+}
+.titleHeroChild{
+  position: absolute;
+  bottom: -18vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'M PLUS Code Latin', sans-serif;
+}
+.custShadow{
+  transition-duration: 300ms;
+  box-shadow: 1vh 1vh 3vh 0vh rgba(66, 85, 255, 0.4);
+}
+.custShadow:hover{
+  scale: 105%;
+  transition-duration: 300ms;
+  box-shadow: 1vh 1vh 4vh 0vh rgba(66, 85, 255, 0.8);
 }
