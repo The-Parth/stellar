@@ -12,7 +12,6 @@ const difficulties = [
 
 const CreateQuiz = () => {
     const { user, loading, setLoading } = useContext(UserContext);
-    const { token } = user;
     const [quizName, setQuizName] = useState('');
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState('');
