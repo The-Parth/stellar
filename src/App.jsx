@@ -1,14 +1,19 @@
 // src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+
+// context
+import { UserProvider } from "./context/userContext";
+
 import Login from "./pages/login/login";
 import Home from "./pages/home/home";
 import Signup from "./pages/login/signup";
+import Dashboard from "./pages/dashboard/dashboard";
+import CreateQuiz from "./pages/create_quiz/create";
 
 const App = () => {
     return (
-        <GoogleOAuthProvider clientId="1093237686281-d74iebn0g6r41qk6l7tcb51irsgbv45l.apps.googleusercontent.com">
+        <UserProvider>
             <Router>
                 <div>
                     {/* Define your routes */}
@@ -16,10 +21,12 @@ const App = () => {
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Signup />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/create" element={<CreateQuiz />} />
                     </Routes>
                 </div>
             </Router>
-        </GoogleOAuthProvider>
+        </UserProvider>
     );
 };
 

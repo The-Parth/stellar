@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { backendUrl } from "../../config";
+import { UserContext } from "../../context/userContext";
+
 
 
 function Signup() {
+    const { setUser } = useContext(UserContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -29,6 +32,10 @@ function Signup() {
                 password,
             });
             if (response.data.success) {
+                // store token in local
+                localStorage.setItem("token", response.data.token);
+                // update user context
+                setUser(response.data);
                 navigate("/dashboard");
             } else {
                 alert("Signup failed");

@@ -18,6 +18,8 @@ function Login() {
             console.log("Password", password);
             const response = await axios.post(`${backendUrl}/api/auth/login`, { email, password });
             if (response.data.success) {
+                // store token in local
+                localStorage.setItem("token", response.data.token);
                 navigate("/dashboard");
             } else {
                 alert("Login failed");
