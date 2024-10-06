@@ -6,6 +6,7 @@ export const UserContext = createContext();
 
 // Create a provider component
 export const UserProvider = ({ children }) => {
+    const [loading, setLoading] = useState(true);
     const [user, setUser] = useState({
         token: null,
         name: null,
@@ -24,10 +25,11 @@ export const UserProvider = ({ children }) => {
                 token,
             }));
         }
+        setLoading(false);
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, loading, setLoading }}>
             {children}
         </UserContext.Provider>
     );

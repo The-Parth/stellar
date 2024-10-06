@@ -4,7 +4,7 @@ import { UserContext } from '../../context/userContext';
 import { backendUrl } from '../../config';
 
 const Dashboard = () => {
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser, loading, setLoading} = useContext(UserContext);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         username: user.username,
@@ -15,6 +15,7 @@ const Dashboard = () => {
 
 
     useEffect(() => {
+        if (loading) {return;}
         const fetchUser = async () => {
             console.log("token", user.token);
             try {
@@ -32,7 +33,7 @@ const Dashboard = () => {
         };
 
         fetchUser();
-    }, []);
+    }, [loading]);
 
 
     const handleChange = (e) => {
