@@ -28,7 +28,7 @@ const CreateQuiz = () => {
             }
         }
         try {
-            const response = await axios.post(`${backendUrl}/api/quiz/create`, 
+            axios.post(`${backendUrl}/api/quiz/create`, 
                 {
                 title: quizName,
                 description,
@@ -41,9 +41,11 @@ const CreateQuiz = () => {
                     "content-type": "application/json",
                     "auth-token": user.token,
                 },
+            }).then((response) => {
+                const quizId = response.data.quiz_id;
+                console.log(response.data);
+                alert(quizId);
             });
-            const quizId = response.data.id;
-            navigate(`/edit_quiz/${quizId}`);
         } catch (error) {
             console.error('Error creating quiz:', error);
         }

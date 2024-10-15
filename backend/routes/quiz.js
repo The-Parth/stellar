@@ -68,29 +68,19 @@ router.post("/create", fetchUser, async (req, res) => {
     }
 });
 
-router.get("/:id/add", fetchUser, async (req, res) => {
+router.post("/:id/add", fetchUser, async (req, res) => {
     // add question to quiz by ID
 
     const { questionId } = req.body;
     const { id } = req.params;
     // check if quiz exists
-    const quiz = await Quiz.findById(id);
+    const quiz = await Quiz.findOne({ quiz_id: id });
     if (!quiz) {
         return res.status(404).json({ error: "Quiz not found" });
     }
 
     try {
-        const quiz = await Quiz.findById(id);
-        if (!quiz) {
-            return res.status(404).json({ error: "Quiz not found" });
-        }
-
-        // check if author username matches
-        if (quiz.author !== req.user.username) {
-            return res.status(401).json({ error: "Unauthorized" });
-        }
-
-        const question = await Question.findById(questionId);
+        const question = await Question.findOne({ "id": questionId });
         if (!question) {
             return res.status(404).json({ error: "Question not found" });
         }
@@ -111,7 +101,7 @@ router.get("/:id", async (req, res) => {
     // get a quiz by ID
     const { id } = req.params;
     try {
-        const quiz = await Quiz.findById(id).populate("questions");
+        const quiz = await Quiz.findOne({ quiz_id: id });
         if (!quiz) {
             return res.status(404).json({ error: "Quiz not found" });
         }

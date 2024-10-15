@@ -10,6 +10,7 @@ import Home from "./pages/home/home";
 import Signup from "./pages/login/signup";
 import Dashboard from "./pages/dashboard/dashboard";
 import CreateQuiz from "./pages/create_quiz/create";
+import EditQuiz from "./pages/create_quiz/edit";
 
 const App = () => {
     return (
@@ -23,6 +24,7 @@ const App = () => {
                         <Route path="/register" element={<Signup />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/create" element={<CreateQuiz />} />
+                        <Route path="/edit_quiz/:quizId" element={<EditQuiz />} />
                     </Routes>
                 </div>
             </Router>
