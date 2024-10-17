@@ -8,8 +8,9 @@ import User from "../models/userModel.js";
 
 const router = express.Router();
 
-router.get("/", async (res, req) => {
+router.get("/", async (req, res) => {
     res.send("Quiz route");
+
 });
 
 router.post("/question/create", fetchUser, async (req, res) => {
