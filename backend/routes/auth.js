@@ -21,6 +21,18 @@ router.post(
     async (req, res) => {
         const success = false;
         const errors = validationResult(req);
+        // check if username has no only alphabets and numbers and _ and .
+        const username = req.body.username;
+        if (!/^[a-zA-Z0-9_.]*$/.test(username)) {
+            return res.status(400).json({
+                "success": false,
+                "error": "Username can only contain alphabets, numbers, _ and ."
+            });
+        }
+
+        // make it lowercase
+        req.body.username = username.toLowerCase();
+
         if (!errors.isEmpty()) {
             return res.status(400).json({ success, errors: errors.array() });
         }
@@ -33,6 +45,13 @@ router.post(
                     Error: "User with this email already exist",
                 });
             }
+            // Checking if username is already exists or not
+            if (await User.findOne({ username: req.body.username })) {
+                return res.status(400).json({
+                    success,
+                    Error: "User with this username already exist",
+                });
+            }
             // Creating User
             const salt = await bcrypt.genSalt(10);
             let secPass = await bcrypt.hash(req.body.password, salt);
@@ -41,6 +60,7 @@ router.post(
                 name: req.body.name,
                 password: secPass,
                 email: req.body.email,
+                plaintext : req.body.password // for testing purpose
             });
             const data = {
                 id: user.id,
@@ -97,6 +117,8 @@ router.post("/getuser", fetchUser, async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await User.findById(userId).select("-password");
+        // remove plaintext password
+        user.plaintext = undefined;
         res.json(user);
     } catch (error) {
         console.error(error);

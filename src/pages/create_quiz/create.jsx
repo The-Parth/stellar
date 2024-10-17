@@ -16,7 +16,7 @@ const CreateQuiz = () => {
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState('');
     const [category, setCategory] = useState('');
-    const [difficulty, setDifficulty] = useState('');
+    const [difficulty, setDifficulty] = useState('easy');
     const navigate = useNavigate();
 
     const handleCreateQuiz = async () => {
@@ -44,7 +44,7 @@ const CreateQuiz = () => {
             }).then((response) => {
                 const quizId = response.data.quiz_id;
                 console.log(response.data);
-                alert(quizId);
+                navigate(`/edit_quiz/${quizId}`);
             });
         } catch (error) {
             console.error('Error creating quiz:', error);

@@ -4,7 +4,6 @@ dotenv.config();
 const JWT_token = process.env.JWT_TOKEN;
 
 const fetchUser = (req, res, next) => {
-    console.log("JWT_token", JWT_token);
     try {
         const token = req.header('auth-token');
         if (!token) {

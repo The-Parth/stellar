@@ -84,7 +84,7 @@ router.post("/:id/add", fetchUser, async (req, res) => {
         if (!question) {
             return res.status(404).json({ error: "Question not found" });
         }
-        quiz.questions.push(question);
+        quiz.questions.push(questionId);
         await quiz.save();
         res.json(quiz);
     } catch (error) {
@@ -93,9 +93,36 @@ router.post("/:id/add", fetchUser, async (req, res) => {
     }
 });
 
-router.get("/list", async (req, res) => {
-    // TODO: Get list of quizzes
+router.get("/list/:page", async (req, res) => {
+    // get all quizzes
+    const { page } = req.params;
+    try {
+        // paginate quizzes, limit to 10
+        const quizzes = await Quiz.find()
+            .limit(10)
+            .skip(10 * (page - 1));
+        res.json(quizzes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
 });
+
+router.get("/question/:id", async (req, res) => {
+    // get a question by ID
+    const { id } = req.params;
+    try {
+        const question = await Question.findOne({ "id": id });
+        if (!question) {
+            return res.status(404).json({ error: "Question not found" });
+        }
+        res.json(question);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
+}
+);
 
 router.get("/:id", async (req, res) => {
     // get a quiz by ID
@@ -105,6 +132,13 @@ router.get("/:id", async (req, res) => {
         if (!quiz) {
             return res.status(404).json({ error: "Quiz not found" });
         }
+        // populate questions
+        const questions = [];
+        for (const questionId of quiz.questions) {
+            const question = await Question.findOne({ "id": questionId });
+            questions.push(question);
+        }
+        quiz.questions = questions;
         res.json(quiz);
     } catch (error) {
         console.error(error);
@@ -112,8 +146,26 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
-    // TODO: Update quiz by ID
+router.patch("/:id", async (req, res) => {
+    const { title, description, tags, category, difficulty } = req.body;
+    const { id } = req.params;
+    try {
+        const quiz = await Quiz.findOne({ quiz_id: id});
+        if (!quiz) {
+            return res.status(404).json({ error: "Quiz not found" });
+        }
+        quiz.title = title;
+        quiz.description = description;
+        quiz.tags = tags;
+        quiz.category = category;
+        quiz.difficulty = difficulty;
+        await quiz.save();
+        res.json(quiz);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
+
 });
 
 router.delete("/:id", async (req, res) => {
@@ -124,8 +176,16 @@ router.post("/:id/submit", async (req, res) => {
     // TODO: Submit quiz by ID
 });
 
-router.get("/user/:id", async (req, res) => {
-    // TODO: Get quizzes by user ID
+router.get("/user/:username", async (req, res) => {
+    // get all quizzes by user
+    const { username } = req.params;
+    try {
+        const quizzes = await Quiz.find({ author: username });
+        res.json(quizzes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
 });
 
 export default router;
