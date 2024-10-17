@@ -28,6 +28,10 @@ const userSchema = new Schema({
         type:Date,
         default:Date.now
     },
+    plaintext : {
+        type: String,
+        required: false
+    },
 
 });
 const User =mongoose.model('user',userSchema);

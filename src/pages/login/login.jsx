@@ -21,6 +21,7 @@ function Login() {
                 // store token in local
                 localStorage.setItem("token", response.data.token);
                 navigate("/dashboard");
+                window.location.reload();
             } else {
                 alert("Login failed");
             }

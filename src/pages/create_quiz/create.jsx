@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { backendUrl } from '../../config';
@@ -18,6 +18,7 @@ const CreateQuiz = () => {
     const [category, setCategory] = useState('');
     const [difficulty, setDifficulty] = useState('easy');
     const navigate = useNavigate();
+
 
     const handleCreateQuiz = async () => {
         var start = new Date().getTime();

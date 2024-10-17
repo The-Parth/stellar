@@ -17,7 +17,13 @@ const Dashboard = () => {
     const [quiz, setQuiz] = useState({});
     const navigate = useNavigate();
 
+    const token = localStorage.getItem("token");
+
     useEffect(() => {
+        if (!token) {
+            navigate("/login");
+        }
+
         if (loading) {
             return;
         }
@@ -251,7 +257,9 @@ const Dashboard = () => {
                             <li
                                 key={q._id}
                                 className="border p-4 rounded-md shadow-sm bg-white hover:shadow-lg transition duration-150 ease-in-out"
-                                onClick={() => navigate(`/edit_quiz/${q.quiz_id}`)}
+                                onClick={() =>
+                                    navigate(`/edit_quiz/${q.quiz_id}`)
+                                }
                             >
                                 <div className="flex flex-col md:flex-row md:justify-between">
                                     <div>
@@ -265,42 +273,40 @@ const Dashboard = () => {
                                             {q.questions.length} questions
                                         </p>
                                     </div>
-                            
-                                        <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
-                                            <div className="flex items-center space-x-2 mb-2 md:mb-0">
-                                                <FaTag className="text-gray-500" />
-                                                <span className="text-sm text-gray-600">
-                                                    Category:
-                                                </span>
-                                                <span className="text-sm font-medium text-blue-600">
-                                                    {q.category}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <FaTachometerAlt className="text-gray-500" />
-                                                <span className="text-sm text-gray-600">
-                                                    Difficulty:
-                                                </span>
-                                                <span
-                                                    className={`text-sm font-medium ${
-                                                        q.difficulty === "hard"
-                                                            ? "text-red-600"
-                                                            : q.difficulty ===
-                                                              "medium"
-                                                            ? "text-yellow-600"
-                                                            : "text-green-600"
-                                                    }`}
-                                                >
-                                                    {q.difficulty === "hard"
-                                                        ? "Hard"
+
+                                    <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
+                                        <div className="flex items-center space-x-2 mb-2 md:mb-0">
+                                            <FaTag className="text-gray-500" />
+                                            <span className="text-sm text-gray-600">
+                                                Category:
+                                            </span>
+                                            <span className="text-sm font-medium text-blue-600">
+                                                {q.category}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <FaTachometerAlt className="text-gray-500" />
+                                            <span className="text-sm text-gray-600">
+                                                Difficulty:
+                                            </span>
+                                            <span
+                                                className={`text-sm font-medium ${
+                                                    q.difficulty === "hard"
+                                                        ? "text-red-600"
                                                         : q.difficulty ===
                                                           "medium"
-                                                        ? "Medium"
-                                                        : "Easy"}
-                                                </span>
-                                            </div>
+                                                        ? "text-yellow-600"
+                                                        : "text-green-600"
+                                                }`}
+                                            >
+                                                {q.difficulty === "hard"
+                                                    ? "Hard"
+                                                    : q.difficulty === "medium"
+                                                    ? "Medium"
+                                                    : "Easy"}
+                                            </span>
                                         </div>
-                          
+                                    </div>
                                 </div>
                             </li>
                         ))}
