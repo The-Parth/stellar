@@ -107,12 +107,18 @@ const newQuestion = ({ quizId, user }) => {
             </div>
             <div className="mb-4">
                 <label className="block text-gray-700">Answer:</label>
-                <input
-                    type="text"
+                <select
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                     className="w-full px-3 py-2 border rounded-lg"
-                />
+                >
+                    <option value="">Select an answer</option>
+                    {options.map((option, index) => (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
             </div>
             <button
                 onClick={handleAddQuestion}

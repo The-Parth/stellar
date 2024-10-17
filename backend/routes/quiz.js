@@ -50,7 +50,7 @@ router.post("/create", fetchUser, async (req, res) => {
             console.log(id);
             console.log(req.user);
             const newQuiz = new Quiz({
-                author: user.username,
+                author: req.user.id,
                 quiz_id: id,
                 title,
                 description,
@@ -181,7 +181,9 @@ router.get("/user/:username", async (req, res) => {
     // get all quizzes by user
     const { username } = req.params;
     try {
-        const quizzes = await Quiz.find({ author: username });
+        const user = await User.findOne({ username });
+        console.log(user);
+        const quizzes = await Quiz.find({ author: user.id });
         res.json(quizzes);
     } catch (error) {
         console.error(error);
