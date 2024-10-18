@@ -25,7 +25,7 @@ function Navbar() {
         var name = user.name;
 
         // generate avatar url using the name with ui-avatars.com
-        var url = `https://ui-avatars.com/api/?name=${name}&background=random&rounded=true&size=128`;
+        var url = `https://ui-avatars.com/api/?name=${name}&background=random&rounded=true&size=512&bold=true&uppercase=true`;
         // make url safe
         url = encodeURI(url);
         setAvatarUrl(url);

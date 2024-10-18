@@ -12,6 +12,7 @@ import Logout from "./pages/login/logout";
 import Dashboard from "./pages/dashboard/dashboard";
 import CreateQuiz from "./pages/create_quiz/create";
 import EditQuiz from "./pages/create_quiz/edit";
+import PlayQuiz from "./pages/play/play";
 
 import "./App.css";
 
@@ -28,8 +29,11 @@ const App = () => {
                         <Route path="/logout" element={<Logout />} />
 
                         <Route path="/dashboard" element={<Dashboard />} />
+
                         <Route path="/create" element={<CreateQuiz />} />
                         <Route path="/edit_quiz/:quizId" element={<EditQuiz />} />
+
+                        <Route path="/play/:quizId" element={<PlayQuiz />} />
                     </Routes>
                 </div>
             </Router>
