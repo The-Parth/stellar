@@ -39,7 +39,7 @@ function Navbar() {
         <>
             <nav className="bg-white transition duration-200 ease-in-out">
                 <div className="flex justify-between items-center py-4 px-8 m-0 z-1 w-full h-20 bg-white text-black">
-                    <LogoComponent />
+                    <LogoComponent click={() => navigate("/")} />
 
                     <input
                         className="h-10 w-1/2 h-14 hidden md:flex border-gray-300 border-2 bg-gray-100 rounded-[16px] px-4 py-6 text-black font-semibold focus:outline-none hover:border-blue-500 transition duration-500 ease-in-out hover:shadow-md hover:bg-gray-200 md:hidden"
