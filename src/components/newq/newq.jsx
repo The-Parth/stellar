@@ -5,9 +5,9 @@ import { backendUrl } from "../../config";
 
 const newQuestion = ({ quizId, user }) => {
     const [question, setQuestion] = useState("");
-    const [type, setType] = useState("");
+    const [type, setType] = useState("single");
     const [options, setOptions] = useState([]);
-    const [answer, setAnswer] = useState("");
+    const [answer, setAnswer] = useState([]);
 
     const handleAddQuestion = async () => {
         try {
@@ -64,12 +64,14 @@ const newQuestion = ({ quizId, user }) => {
             </div>
             <div className="mb-4">
                 <label className="block text-gray-700">Type:</label>
-                <input
-                    type="text"
+                <select
                     value={type}
                     onChange={(e) => setType(e.target.value)}
                     className="w-full px-3 py-2 border rounded-lg"
-                />
+                >
+                    <option value="single">Single Choice</option>
+                    <option value="multiple">Multiple Choice</option>
+                </select>
             </div>
             <div className="mb-4">
                 <label className="block text-gray-700">Options:</label>
@@ -107,18 +109,40 @@ const newQuestion = ({ quizId, user }) => {
             </div>
             <div className="mb-4">
                 <label className="block text-gray-700">Answer:</label>
-                <select
-                    value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                    className="w-full px-3 py-2 border rounded-lg"
-                >
-                    <option value="">Select an answer</option>
+                {type === "single" ? (
+                    <select
+                        value={answer[0]}
+                        onChange={(e) => setAnswer([e.target.value])}
+                        className="w-full px-3 py-2 border rounded-lg"
+                    >
+                        {options.map((option, index) => (
+                            <option key={index} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                ) :
+
+                (<div>
                     {options.map((option, index) => (
-                        <option key={index} value={option}>
-                            {option}
-                        </option>
+                        <div key={index} className="flex items-center mb-2">
+                            <input
+                                type="checkbox"
+                                checked={answer.includes(option)}
+                                onChange={(e) => {
+                                    const newAnswer = e.target.checked
+                                        ? [...answer, option]
+                                        : answer.filter(
+                                              (ans) => ans !== option
+                                          );
+                                    setAnswer(newAnswer);
+                                }}
+                                className="mr-2"
+                            />
+                            <span>{option}</span>
+                        </div>
                     ))}
-                </select>
+                </div>)}
             </div>
             <button
                 onClick={handleAddQuestion}

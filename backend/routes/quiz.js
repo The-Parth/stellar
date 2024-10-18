@@ -147,8 +147,8 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.patch("/:id", async (req, res) => {
-    const { title, description, tags, category, difficulty } = req.body;
+router.patch("/:id", fetchUser, async (req, res) => {
+    const { title, description, tags, category, difficulty, duration } = req.body;
     const { id } = req.params;
     try {
         const quiz = await Quiz.findOne({ quiz_id: id});
@@ -160,6 +160,9 @@ router.patch("/:id", async (req, res) => {
         quiz.tags = tags;
         quiz.category = category;
         quiz.difficulty = difficulty;
+        if (duration) {
+            quiz.duration = duration;
+        }
         await quiz.save();
         res.json(quiz);
     } catch (error) {

@@ -4,6 +4,7 @@ import NewQuestion from "../../components/newq/newq"; // Correct import
 import { UserContext } from "../../context/userContext";
 import { backendUrl } from "../../config";
 import { useParams } from "react-router-dom"; // Import useParams
+import Navbar from "../../components/Navbar";
 
 const EditQuiz = () => {
     const { quizId } = useParams(); // Destructure quizId from useParams
@@ -75,6 +76,8 @@ const EditQuiz = () => {
     }, [quizId, user.token]);
 
     return (
+        <>
+            <Navbar />
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h1 className="text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
@@ -182,6 +185,7 @@ const EditQuiz = () => {
                 {newQuestion && <NewQuestion quizId={quizId} user={user} />}
             </div>
         </div>
+        </>
     );
 };
 

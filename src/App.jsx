@@ -13,6 +13,8 @@ import Dashboard from "./pages/dashboard/dashboard";
 import CreateQuiz from "./pages/create_quiz/create";
 import EditQuiz from "./pages/create_quiz/edit";
 
+import "./App.css";
+
 const App = () => {
     return (
         <UserProvider>

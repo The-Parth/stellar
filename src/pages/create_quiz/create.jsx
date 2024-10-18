@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { backendUrl } from '../../config';
 import { UserContext } from '../../context/userContext';
+import Navbar from '../../components/Navbar';
 
 const difficulties = [
     { value: 'easy', label: 'Easy' },
@@ -18,6 +19,14 @@ const CreateQuiz = () => {
     const [category, setCategory] = useState('');
     const [difficulty, setDifficulty] = useState('easy');
     const navigate = useNavigate();
+
+    // check if user is logged in
+    useEffect(() => {
+        if (!user.token && !loading) {
+            console.log('User not logged in');
+            console.log(loading);
+        }
+    }, [user]);
 
 
     const handleCreateQuiz = async () => {
@@ -53,7 +62,9 @@ const CreateQuiz = () => {
     };
 
     return (
-        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <>
+            <Navbar />
+            <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h1 className="text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
                     Create Quiz
@@ -160,6 +171,7 @@ const CreateQuiz = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

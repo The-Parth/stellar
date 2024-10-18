@@ -7,7 +7,13 @@ import { backendUrl } from "../../config";
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [invalidPass, setInvalidPass] = useState("hidden");
     const navigate = useNavigate();
+
+    // check if user is already logged in, redirect to dashboard
+    if (localStorage.getItem("token")) {
+        navigate("/dashboard");
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,10 +29,15 @@ function Login() {
                 navigate("/dashboard");
                 window.location.reload();
             } else {
-                alert("Login failed");
+                console.error("There was an error logging in!", response.data);
             }
         } catch (error) {
-            console.error("There was an error logging in!", error);
+            if (error.response.status == 400) {
+                console.error("Invalid email or password!");
+                setInvalidPass("block");
+
+            } else
+                console.error("There was an error logging in!", error);
         }
     };
 
@@ -82,7 +93,9 @@ function Login() {
                                 />
                             </div>
                         </div>
-
+                        <div className={`flex items-center justify-between ${invalidPass}`}>
+                            <p className="text-red-500">Invalid email or password</p>
+                        </div>
                         <div>
                             <button
                                 type="submit"
