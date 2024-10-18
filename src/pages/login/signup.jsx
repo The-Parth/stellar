@@ -17,6 +17,10 @@ function Signup() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const navigate = useNavigate();
 
+    if (localStorage.getItem("token")) {
+        navigate("/dashboard");
+    }
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
@@ -37,6 +41,7 @@ function Signup() {
                 // update user context
                 setUser(response.data);
                 navigate("/dashboard");
+                window.location.reload();
             } else {
                 alert("Signup failed");
             }

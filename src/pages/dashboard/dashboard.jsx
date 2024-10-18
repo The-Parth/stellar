@@ -4,6 +4,7 @@ import { UserContext } from "../../context/userContext";
 import { backendUrl } from "../../config";
 import { useNavigate } from "react-router-dom";
 import { FaTag, FaTachometerAlt } from "react-icons/fa";
+import Navbar from "../../components/Navbar";
 
 const Dashboard = () => {
     const { user, setUser, loading, setLoading } = useContext(UserContext);
@@ -144,6 +145,7 @@ const Dashboard = () => {
     };
 
     return (
+        <> <Navbar />
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 bg-gray-50">
             <div className="sm:mx-auto sm:w-full sm:max-w-lg lg:max-w-4xl">
                 <h1 className="text-center text-3xl font-bold leading-9 tracking-tight text-blue-600 mb-6">
@@ -324,6 +326,7 @@ const Dashboard = () => {
                 </button>
             </div>
         </div>
+        </>
     );
 };
 
