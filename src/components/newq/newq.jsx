@@ -11,6 +11,18 @@ const newQuestion = ({ quizId, user }) => {
 
     const handleAddQuestion = async () => {
         try {
+            if (!question) {
+                alert("Question cannot be empty!");
+                return;
+            }
+            if (options.length < 2) {
+                alert("At least 2 options are required!");
+                return;
+            }
+            if (answer.length < 1) {
+                alert("At least 1 answer is required!");
+                return;
+            }
             const response = await axios.post(
                 `${backendUrl}/api/quiz/question/create`,
                 {
@@ -84,6 +96,18 @@ const newQuestion = ({ quizId, user }) => {
                                 const newOptions = [...options];
                                 newOptions[index] = e.target.value;
                                 setOptions(newOptions);
+                                // check if answer includes the option
+                                // if single choice, set answer to the option
+                                if (type === "single" && answer[0] === option) {
+                                    setAnswer([e.target.value]);
+                                }
+
+                                if (type === "multiple") {
+                                    const newAnswer = answer.map((ans) =>
+                                        ans === option ? e.target.value : ans
+                                    );
+                                    setAnswer(newAnswer);
+                                }
                             }}
                             className="w-full px-3 py-2 border rounded-lg"
                         />
@@ -93,6 +117,11 @@ const newQuestion = ({ quizId, user }) => {
                                     (_, i) => i !== index
                                 );
                                 setOptions(newOptions);
+                                // remove option from answer
+                                const newAnswer = answer.filter(
+                                    (ans) => ans !== option
+                                );
+                                setAnswer(newAnswer);
                             }}
                             className="ml-2 px-3 py-2 bg-red-500 text-white rounded-lg"
                         >
