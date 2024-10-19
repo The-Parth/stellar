@@ -183,9 +183,9 @@ const newQuestion = ({ quizId, user }) => {
             </div>
             <button
                 onClick={handleAddQuestion}
-                className="w-full px-3 py-2 bg-green-500 text-white rounded-lg"
+                className="w-full px-3 py-2 bg-customBlue text-white rounded-lg"
             >
-                Add Question to Quiz
+                Add to Quiz
             </button>
         </div>
     );
