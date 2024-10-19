@@ -298,7 +298,7 @@ const Home = () => {
                     <img
                         src={heroSvg}
                         alt="Hero"
-                        className="hero-image w-[50vw]"
+                        className="hero-image w-[50vw] hidden md:block"
                     />
                 </header>
 

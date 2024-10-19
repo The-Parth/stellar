@@ -13,6 +13,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import CreateQuiz from "./pages/create_quiz/create";
 import EditQuiz from "./pages/create_quiz/edit";
 import PlayQuiz from "./pages/play/play";
+import Explore from "./pages/explore/explore";
 
 import "./App.css";
 
@@ -30,10 +31,13 @@ const App = () => {
 
                         <Route path="/dashboard" element={<Dashboard />} />
 
+                        <Route path="/explore" element={<Explore />} />
+
                         <Route path="/create" element={<CreateQuiz />} />
                         <Route path="/edit_quiz/:quizId" element={<EditQuiz />} />
 
                         <Route path="/play/:quizId" element={<PlayQuiz />} />
+                        
                     </Routes>
                 </div>
             </Router>

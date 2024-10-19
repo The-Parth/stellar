@@ -6,12 +6,16 @@ import LogoComponent from "./containers/LogoComponent";
 import { NavLinkUnderlined } from "./containers/NavLinkUnderline";
 import axios from "axios";
 
+import { IoMdMenu, IoIosArrowUp } from "react-icons/io";
+
 import { UserContext } from "../context/userContext";
 import { backendUrl } from "../config";
 
 function Navbar() {
     const [isExpanded, setIsExpanded] = useState(false);
     const { user, setUser, loading, setLoading } = useContext(UserContext);
+
+    const [logged, setLogged] = useState(false);
 
     const navigate = useNavigate();
 
@@ -21,6 +25,7 @@ function Navbar() {
 
     useEffect(() => {
         if (!user.token && !loading) {
+            setLogged(false);
         }
         var name = user.name;
 
@@ -29,6 +34,9 @@ function Navbar() {
         // make url safe
         url = encodeURI(url);
         setAvatarUrl(url);
+        if (user.name) {
+            setLogged(true);
+        }
     }, [user]);
 
     const toggleNavbar = () => {
@@ -47,13 +55,16 @@ function Navbar() {
                     />
 
                     <div className="items-center justify-between gap-auto space-x-5 hidden lg:flex">
+                        <NavLinkUnderlined to="/explore" text="Explore">
+                            Explore
+                        </NavLinkUnderlined>
                         <NavLinkUnderlined to="/create" text="Create">
                             Create
                         </NavLinkUnderlined>
                     </div>
 
                     <div className="flex flex-row items-center gap-3 ml-5 -mr-5">
-                        {user ? (
+                        {logged ? (
                             <div
                                 className="flex items-center cursor-pointer"
                                 onClick={() => {
@@ -77,22 +88,31 @@ function Navbar() {
                         )}
                         <div className="lg:hidden">
                             <button
-                                className="fa-solid fa-bars mx-2 fa-2xl ml-2 text-black"
+                                className="text-black focus:outline-none text-3xl transition duration-500 ease-in-out"
                                 onClick={toggleNavbar}
-                            ></button>
+                            >
+                                {isExpanded ? (
+                                    <IoIosArrowUp />
+                                ) : (
+                                    <IoMdMenu />
+                                )}
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div
                     className={`lg:hidden ${
                         isExpanded ? "block" : "hidden"
-                    } bg-white`}
+                    } bg-white transition duration-500 ease-in-out`}
                 >
                     <div className="flex flex-col mt-4 pb-3">
                         <div className="text-black font-semibold mb-2 text-right space-y-3 pr-5">
                             <div className="inline-flex flex-col">
-                                <NavLinkUnderlined to="/about" text="About">
-                                    About
+                                <NavLinkUnderlined to="/explore" text="Explore">
+                                    Explore
+                                </NavLinkUnderlined>
+                                <NavLinkUnderlined to="/create" text="Create">
+                                    Create
                                 </NavLinkUnderlined>
                             </div>
                         </div>
