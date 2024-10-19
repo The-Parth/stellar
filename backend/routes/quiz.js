@@ -172,6 +172,24 @@ router.patch("/:id", fetchUser, async (req, res) => {
 
 });
 
+router.patch("/:id/publish", fetchUser, async (req, res) => {
+    const { id } = req.params;
+    const { published } = req.body;
+    console.log(published);
+    try {
+        const quiz = await Quiz.findOne({ quiz_id: id });
+        if (!quiz) {
+            return res.status(404).json({ error: "Quiz not found" });
+        }
+        quiz.isPublished = published;
+        await quiz.save();
+        res.json(quiz);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
+});
+
 router.delete("/:id", async (req, res) => {
     // TODO: Delete quiz by ID
 });

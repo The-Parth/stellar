@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "backend": "cd .. && nodemon backend/index.js"
+    },
+    "type": "module"
+}

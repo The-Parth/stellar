@@ -5,10 +5,13 @@ import { UserContext } from "../../context/userContext";
 import { backendUrl } from "../../config";
 import { useParams } from "react-router-dom"; // Import useParams
 import Navbar from "../../components/Navbar";
+import { set } from "mongoose";
 
 const EditQuiz = () => {
     const { quizId } = useParams(); // Destructure quizId from useParams
     const { user, loading, setLoading } = useContext(UserContext);
+
+    var varvar = 0;
 
     const [quizName, setQuizName] = useState("");
     const [description, setDescription] = useState("");
@@ -17,6 +20,8 @@ const EditQuiz = () => {
     const [difficulty, setDifficulty] = useState("");
     const [questions, setQuestions] = useState([]);
     const [newQuestion, setNewQuestion] = useState(false);
+    const [published, setPublished] = useState(false);
+    const [publishing, setPublishing] = useState(false);
 
     const saveQuiz = async () => {
         try {
@@ -64,6 +69,7 @@ const EditQuiz = () => {
                 setCategory(quiz.category);
                 setDifficulty(quiz.difficulty);
                 setQuestions(quiz.questions);
+                setPublished(quiz.published);
 
                 console.log(quiz);
             } catch (error) {
@@ -75,6 +81,30 @@ const EditQuiz = () => {
         fetchQuiz();
     }, [quizId, user.token]);
 
+    const publishQuiz = async () => {
+        setPublished(!published);
+        setPublishing(true);
+        setTimeout(() => setPublishing(false), 2000);
+        try {
+            const response = await axios.patch(
+                `${backendUrl}/api/quiz/${quizId}/publish`,
+                {
+                    published: !published,
+                },
+                {
+                    headers: {
+                        "content-type": "application/json",
+                        "auth-token": user.token,
+                    },
+                }
+            );
+            console.log(response.data);
+            setPublished(response.data.isPublished);    
+        } catch (error) {
+            console.error("Error publishing quiz:", error);
+        }
+    };
+
     return (
         <>
             <Navbar />
@@ -82,7 +112,21 @@ const EditQuiz = () => {
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h1 className="text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
                     Edit Quiz
+                    <p className={`text-sm ${published ? "text-green-500" : "text-red-500"}`}>
+                        
+                        {(
+                            publishing ? 
+                             published ? "Publishing..." : "Unpublishing..." :
+                        <>
+                        <span>{published ? "Published" : "Not Published"}</span>
+                        <button className="ml-2 text-xs text-white bg-customBlue hover:bg-customBlueDark px-2 py-1 rounded" onClick={() => publishQuiz()}>
+                            {published ? "Unpublish" : "Publish"}
+                        </button> 
+                        </>
+                        )}
+                    </p>
                 </h1>
+               
             </div>
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
@@ -184,6 +228,9 @@ const EditQuiz = () => {
                 </button>
                 {newQuestion && <NewQuestion quizId={quizId} user={user} />}
             </div>
+        </div>
+        <div className="text-center text-xs text-gray-400 mt-4">
+            Quiz ID: {quizId}
         </div>
         </>
     );
