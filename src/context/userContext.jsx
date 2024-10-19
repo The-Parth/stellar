@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import { backendUrl } from "../config";
 
+
 // Create the UserContext
 export const UserContext = createContext();
 
@@ -47,6 +48,7 @@ export const UserProvider = ({ children }) => {
                                 name: response.data.name,
                                 username: response.data.username,
                                 email: response.data.email,
+                                profilePicture: `https://ui-avatars.com/api/?name=${response.data.name}&background=random&rounded=true&size=512&uppercase=true&color=fff`,
                                 token: token,
                             });
                         });

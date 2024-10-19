@@ -116,11 +116,13 @@ const EditQuiz = () => {
                 }
             );
             console.log(response.data);
-            setQuestions(questions.filter((question) => question.id !== questionId));
+            setQuestions(
+                questions.filter((question) => question.id !== questionId)
+            );
         } catch (error) {
             console.error("Error deleting question:", error);
         }
-    }
+    };
     return (
         <>
             <Navbar />
@@ -219,33 +221,66 @@ const EditQuiz = () => {
                                 Questions
                             </label>
                             <ul className="list-disc pl-5">
-                                {questions.map((question, index) => (
-                                    <li key={index} className="mb-2">
-                                        <div className="flex flex-row justify-between items-center">
+                                {questions.map((question, index) =>
+                                    question && !question.error ? (
+                                        <>
+                                            <li key={index} className="mb-2">
+                                                <div className="flex flex-row justify-between items-center">
+                                                    <div className="font-bold">
+                                                        {question.question}
+                                                    </div>
+                                                    <button
+                                                        className="mt-0 text-xs text-white bg-red-500 hover:bg-red-700 px-2 py-1 rounded"
+                                                        onClick={() =>
+                                                            deleteQuestion(
+                                                                question.id
+                                                            )
+                                                        }
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                                <ul className="list-disc pl-5">
+                                                    {question.options.map(
+                                                        (option, idx) => (
+                                                            <li key={idx}>
+                                                                {option}
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                                <div className="italic">
+                                                    Answer:{" "}
+                                                    {question.answer.join(", ")}
+                                                </div>
+                                            </li>
+                                        </>
+                                    ) : (
+                                        <li
+                                            key={index}
+                                            className="relative mb-2 p-4 border rounded-md shadow-sm bg-white"
+                                        >
                                             <div className="font-bold">
-                                                {question.question}
+                                                Question not found
+                                            </div>
+                                            <div className="italic">
+                                                The question may have been
+                                                deleted, or there was an error
+                                                fetching the question. Please
+                                                try again if you think this is
+                                                an error.
                                             </div>
                                             <button
-                                                className="mt-0 text-xs text-white bg-red-500 hover:bg-red-700 px-2 py-1 rounded"
                                                 onClick={() =>
                                                     deleteQuestion(question.id)
                                                 }
+                                                className="absolute bottom-4 right-4 bg-red-600 text-white text-xs px-2 py-1 rounded-md hover:bg-red-700 transition duration-150 ease-in-out"
                                             >
                                                 Delete
                                             </button>
-                                        </div>
-                                        <ul className="list-disc pl-5">
-                                            {question.options.map(
-                                                (option, idx) => (
-                                                    <li key={idx}>{option}</li>
-                                                )
-                                            )}
-                                        </ul>
-                                        <div className="italic">
-                                            Answer: {question.answer.join(", ")}
-                                        </div>
-                                    </li>
-                                ))}
+                                        </li>
+                                    )
+                                )}
                             </ul>
                         </div>
                         <div className="mt-8">

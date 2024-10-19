@@ -135,6 +135,13 @@ router.get("/:id", async (req, res) => {
         const questions = [];
         for (const questionId of quiz.questions) {
             const question = await Question.findOne({ id: questionId });
+            if (!question) {
+                questions.push(
+                    { error: true, id: questionId }
+                );
+                continue;
+
+            }
             questions.push(question);
         }
         quiz.questions = questions;
@@ -188,7 +195,7 @@ router.patch("/:id/publish", fetchUser, async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", fetchUser, async (req, res) => {
     // delete quiz by ID
     const { id } = req.params;
     try {
@@ -196,7 +203,11 @@ router.delete("/:id", async (req, res) => {
         if (!quiz) {
             return res.status(404).json({ error: "Quiz not found" });
         }
-        await quiz.remove();
+        // Check if the user is the author of the quiz
+        if (quiz.author.toString() !== req.user.id) {
+            return res.status(403).json({ error: "Unauthorized" });
+        }
+        await Quiz.deleteOne({ quiz_id: id });
         res.json({ message: "Quiz deleted" });
     } catch (error) {
         console.error(error);
