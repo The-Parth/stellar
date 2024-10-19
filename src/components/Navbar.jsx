@@ -80,7 +80,7 @@ function Navbar() {
                         ) : (
                             <Button
                                 text="Login"
-                                stylevar="font-semibold text-blue-500 bg-transparent hover:bg-blue-500 hover:text-white p-2 rounded transition duration-500 ease-in-out border-2 border-blue-500 py-2 rounded-[16px] hover:shadow-md"
+                                stylevar="font-semibold text-customBlueLight bg-transparent hover:bg-customBlueLight hover:text-white p-2 rounded transition duration-500 ease-in-out border-2 border-customBlueLight py-2 rounded-[16px] hover:shadow-md"
                                 onClick={() => {
                                     navigate("/login");
                                 }}

@@ -6,7 +6,7 @@ export const NavLinkUnderlined = ({ to, children, onClick }) => {
         <NavLink
             onClick={onClick ? onClick : null}
             to={to}
-            className="text-primary text-bold transition underline-animation lg:text-primary lg:hover:text-primary lg:transition lg:underline-animation hover:text-customBlueDark"
+            className="text-primary text-bold transition underline-animation lg:text-primary lg:hover:text-primary lg:transition lg:underline-animation hover:text-customBlueLight"
         >
             {children}
         </NavLink>
