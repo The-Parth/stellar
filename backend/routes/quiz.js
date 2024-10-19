@@ -10,7 +10,6 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     res.send("Quiz route");
-
 });
 
 router.post("/question/create", fetchUser, async (req, res) => {
@@ -81,7 +80,7 @@ router.post("/:id/add", fetchUser, async (req, res) => {
     }
 
     try {
-        const question = await Question.findOne({ "id": questionId });
+        const question = await Question.findOne({ id: questionId });
         if (!question) {
             return res.status(404).json({ error: "Question not found" });
         }
@@ -113,7 +112,7 @@ router.get("/question/:id", async (req, res) => {
     // get a question by ID
     const { id } = req.params;
     try {
-        const question = await Question.findOne({ "id": id });
+        const question = await Question.findOne({ id: id });
         if (!question) {
             return res.status(404).json({ error: "Question not found" });
         }
@@ -122,8 +121,7 @@ router.get("/question/:id", async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Server Error" });
     }
-}
-);
+});
 
 router.get("/:id", async (req, res) => {
     // get a quiz by ID
@@ -136,7 +134,7 @@ router.get("/:id", async (req, res) => {
         // populate questions
         const questions = [];
         for (const questionId of quiz.questions) {
-            const question = await Question.findOne({ "id": questionId });
+            const question = await Question.findOne({ id: questionId });
             questions.push(question);
         }
         quiz.questions = questions;
@@ -148,10 +146,11 @@ router.get("/:id", async (req, res) => {
 });
 
 router.patch("/:id", fetchUser, async (req, res) => {
-    const { title, description, tags, category, difficulty, duration } = req.body;
+    const { title, description, tags, category, difficulty, duration } =
+        req.body;
     const { id } = req.params;
     try {
-        const quiz = await Quiz.findOne({ quiz_id: id});
+        const quiz = await Quiz.findOne({ quiz_id: id });
         if (!quiz) {
             return res.status(404).json({ error: "Quiz not found" });
         }
@@ -169,7 +168,6 @@ router.patch("/:id", fetchUser, async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Server Error" });
     }
-
 });
 
 router.patch("/:id/publish", fetchUser, async (req, res) => {
@@ -191,7 +189,19 @@ router.patch("/:id/publish", fetchUser, async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-    // TODO: Delete quiz by ID
+    // delete quiz by ID
+    const { id } = req.params;
+    try {
+        const quiz = await Quiz.findOne({ quiz_id: id });
+        if (!quiz) {
+            return res.status(404).json({ error: "Quiz not found" });
+        }
+        await quiz.remove();
+        res.json({ message: "Quiz deleted" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
 });
 
 router.post("/:id/submit", async (req, res) => {
@@ -206,6 +216,31 @@ router.get("/user/:username", async (req, res) => {
         console.log(user);
         const quizzes = await Quiz.find({ author: user.id });
         res.json(quizzes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
+});
+
+router.delete("/:id/question/:questionId", async (req, res) => {
+    // delete question from quiz
+    const { id, questionId } = req.params;
+    console.log(id, questionId);
+    var operation = "";
+    try {
+        const quiz = await Quiz.findOne({ quiz_id: id });
+        if (!quiz) {
+            return res.status(404).json({ error: "Quiz not found" });
+        }
+        const index = quiz.questions.indexOf(questionId);
+        if (index > -1) {
+            quiz.questions.splice(index, 1);
+            operation = "deleted";
+        } else {
+            operation = "not found";
+        }
+        await quiz.save();
+        res.json({ message: `Question ${operation}`, quiz });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server Error" });
