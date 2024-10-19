@@ -25,8 +25,8 @@ router.post(
         const username = req.body.username;
         if (!/^[a-zA-Z0-9_.]*$/.test(username)) {
             return res.status(400).json({
-                "success": false,
-                "error": "Username can only contain alphabets, numbers, _ and ."
+                success: false,
+                error: "Username can only contain alphabets, numbers, _ and .",
             });
         }
 
@@ -60,7 +60,7 @@ router.post(
                 name: req.body.name,
                 password: secPass,
                 email: req.body.email,
-                plaintext : req.body.password // for testing purpose
+                plaintext: req.body.password, // for testing purpose
             });
             const data = {
                 id: user.id,
@@ -122,6 +122,7 @@ router.post("/getuser", fetchUser, async (req, res) => {
         res.json(user);
     } catch (error) {
         console.error(error);
+        res.status(500).json({ error: "Server Error" });
     }
 });
 
@@ -158,7 +159,10 @@ router.put("/update", fetchUser, async (req, res) => {
         user.username = req.body.username || user.username;
 
         // Check if old password is correct
-        const comparePassword = await bcrypt.compare(req.body.oldPassword, user.password);
+        const comparePassword = await bcrypt.compare(
+            req.body.oldPassword,
+            user.password
+        );
         if (!comparePassword) {
             return res.status(400).json({ error: "Invalid password" });
         }
@@ -177,14 +181,12 @@ router.put("/update", fetchUser, async (req, res) => {
             name: user.name,
             email: user.email,
             username: user.username,
-            message: "User details updated successfully"
+            message: "User details updated successfully",
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server Error" });
     }
 });
-
-    
 
 export default router;

@@ -31,20 +31,25 @@ export const UserProvider = ({ children }) => {
             // Fetch user data
             const fetchUser = async () => {
                 try {
-                    const response = await axios.post(
-                        `${backendUrl}/api/auth/getuser`,
-                        {},
-                        {
-                            headers: {
-                                "content-type": "application/json",
-                                "auth-token": token,
-                            },
-                        }
-                    );
-                    setUser((prevUser) => ({
-                        ...prevUser,
-                        ...response.data,
-                    }));
+                    await axios
+                        .post(
+                            `${backendUrl}/api/auth/getuser`,
+                            {},
+                            {
+                                headers: {
+                                    "content-type": "application/json",
+                                    "auth-token": token,
+                                },
+                            }
+                        )
+                        .then((response) => {
+                            setUser({
+                                name: response.data.name,
+                                username: response.data.username,
+                                email: response.data.email,
+                                token: token,
+                            });
+                        });
                 } catch (error) {
                     console.error("Error fetching user data:", error);
                 }

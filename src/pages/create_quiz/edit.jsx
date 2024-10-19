@@ -69,7 +69,8 @@ const EditQuiz = () => {
                 setCategory(quiz.category);
                 setDifficulty(quiz.difficulty);
                 setQuestions(quiz.questions);
-                setPublished(quiz.published);
+                setPublished(quiz.isPublished);
+
 
                 console.log(quiz);
             } catch (error) {
