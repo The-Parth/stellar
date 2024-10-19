@@ -6,8 +6,8 @@ import { backendUrl } from "../../config";
 const newQuestion = ({ quizId, user }) => {
     const [question, setQuestion] = useState("");
     const [type, setType] = useState("single");
-    const [options, setOptions] = useState([]);
-    const [answer, setAnswer] = useState([]);
+    const [options, setOptions] = useState([""]);
+    const [answer, setAnswer] = useState([""]);
 
     const handleAddQuestion = async () => {
         try {
@@ -22,6 +22,13 @@ const newQuestion = ({ quizId, user }) => {
             if (answer.length < 1) {
                 alert("At least 1 answer is required!");
                 return;
+            }
+
+            for (const option of options) {
+                if (!option) {
+                    alert("Option cannot be empty!");
+                    return;
+                }
             }
             const response = await axios.post(
                 `${backendUrl}/api/quiz/question/create`,
@@ -110,6 +117,7 @@ const newQuestion = ({ quizId, user }) => {
                                 }
                             }}
                             className="w-full px-3 py-2 border rounded-lg"
+                            placeholder={`Option ${index + 1}`}
                         />
                         <button
                             onClick={() => {

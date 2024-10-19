@@ -336,7 +336,7 @@ const Dashboard = () => {
                                             </p>
                                         </div>
 
-                                        <div className="flex flex-col mb-3 md:flex-row md:items-center md:space-x-4">
+                                        <div className="flex flex-col px-3 md:flex-row md:items-center md:space-x-4 mt-5 md:mt-0">
                                             <div className="flex items-center space-x-2 mb-2 md:mb-0">
                                                 <FaTag className="text-gray-500" />
                                                 <span className="text-sm text-gray-600">
@@ -371,12 +371,23 @@ const Dashboard = () => {
                                             </div>
                                         </div>
                                     </div>
+                                    <span
+                                        className={`absolute top-4 right-4 text-xs font-semibold px-2 py-1 -translate-y-1 rounded-md ${
+                                            q.isPublished
+                                                ? "bg-green-100 text-green-800"
+                                                : "bg-red-100 text-red-800"
+                                        }`}
+                                    >
+                                        {q.isPublished
+                                            ? "Published"
+                                            : "Unpublished"}
+                                    </span>
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation(); // Prevent the click from triggering the navigate
                                             handleDelete(q.quiz_id);
                                         }}
-                                        className="absolute bottom-4 right-4 bg-red-600 text-white text-xs px-2 py-1 rounded-md hover:bg-red-700 transition duration-150 ease-in-out"
+                                        className="absolute bottom-4 right-4 bg-red-600 text-white text-xs px-2 py-1 rounded-md hover:bg-red-700 transition duration-150 ease-in-out translate-y-1"
                                     >
                                         Delete
                                     </button>
