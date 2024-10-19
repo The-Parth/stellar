@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/question/create", fetchUser, async (req, res) => {
-    const { question, type, options, answer } = req.body;
+    const { question, type, options, answer, points } = req.body;
     // generate random id, based on current time and author
     const id = "q" + Date.now() + "_" + req.user.id;
     console.log(id);
@@ -24,6 +24,7 @@ router.post("/question/create", fetchUser, async (req, res) => {
             options,
             answer,
             id,
+            points: points || 1,
         });
         await newQuestion.save();
         res.json(newQuestion);
@@ -96,11 +97,28 @@ router.post("/:id/add", fetchUser, async (req, res) => {
 router.get("/list/:page", async (req, res) => {
     // get all quizzes
     const { page } = req.params;
+    if (page < 1 || isNaN(page)) {
+        // return number of pages
+        const count = await Quiz.countDocuments({ isPublished: true });
+        return res.json({ pages: Math.ceil(count / 10) });
+    }
     try {
         // paginate quizzes, limit to 10
-        const quizzes = await Quiz.find()
+        const quizzes = await Quiz.find({ isPublished: true })
             .limit(10)
             .skip(10 * (page - 1));
+
+        // remove questions from response
+        for (const quiz of quizzes) {
+            quiz.questions = quiz.questions.length;
+        }
+
+        // fetch authors
+        for (const quiz of quizzes) {
+            const author = await User.findById(quiz.author);
+            quiz.author = author.username;
+        }
+
         res.json(quizzes);
     } catch (error) {
         console.error(error);
@@ -213,10 +231,6 @@ router.delete("/:id", fetchUser, async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Server Error" });
     }
-});
-
-router.post("/:id/submit", async (req, res) => {
-    // TODO: Submit quiz by ID
 });
 
 router.get("/user/:username", async (req, res) => {

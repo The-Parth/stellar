@@ -22,6 +22,33 @@ const EditQuiz = () => {
     const [newQuestion, setNewQuestion] = useState(false);
     const [published, setPublished] = useState(false);
     const [publishing, setPublishing] = useState(false);
+    const [duration, setDuration] = useState(0);
+
+    const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        if (!duration) {
+            setDuration(0);
+        }
+        if (duration < 0) {
+            setDuration(0);
+        }
+        if (duration > 300) {
+            setDuration(300);
+        }
+    }, [duration]);
+
+
+    useEffect(() => {
+        if (showModal) {
+            document.body.classList.add('overflow-hidden');
+        } else {
+            document.body.classList.remove('overflow-hidden');
+        }
+        return () => {
+            document.body.classList.remove('overflow-hidden');
+        };
+    }, [showModal]);
 
     const saveQuiz = async () => {
         try {
@@ -34,6 +61,7 @@ const EditQuiz = () => {
                     category,
                     difficulty,
                     questions,
+                    duration,
                 },
                 {
                     headers: {
@@ -43,6 +71,7 @@ const EditQuiz = () => {
                 }
             );
             console.log(response.data);
+            setShowModal(true);
         } catch (error) {
             console.error("Error saving quiz:", error);
         }
@@ -69,6 +98,7 @@ const EditQuiz = () => {
                 setDifficulty(quiz.difficulty);
                 setQuestions(quiz.questions);
                 setPublished(quiz.isPublished);
+                setDuration(quiz.duration ? quiz.duration : 0);
 
                 console.log(quiz);
             } catch (error) {
@@ -83,7 +113,10 @@ const EditQuiz = () => {
     const publishQuiz = async () => {
         setPublished(!published);
         setPublishing(true);
-        setTimeout(() => setPublishing(false), 2000);
+        // random value between 500 and 1800
+        const randomTime = Math.floor(Math.random() * 1300) + 500;
+        setTimeout(() => setPublishing(false), randomTime);
+
         try {
             const response = await axios.patch(
                 `${backendUrl}/api/quiz/${quizId}/publish`,
@@ -125,7 +158,25 @@ const EditQuiz = () => {
     };
     return (
         <>
+
             <Navbar />
+            {showModal && (
+                <>
+                    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                        <div className="bg-white p-6 rounded-lg shadow-lg">
+                            <div className="text-center text-green-500 text-lg font-bold">
+                                Quiz saved successfully
+                            </div>
+                            <button
+                                className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-customBlue hover:bg-customBlueDark"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 bg-gray-100">
                 <div className="sm:mx-auto sm:w-full sm:max-w-lg">
                     <h1 className="text-center text-3xl font-bold leading-9 tracking-tight text-gray-900 mb-4">
@@ -218,43 +269,54 @@ const EditQuiz = () => {
                         </div>
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700">
+                                Duration (in minutes)
+                            </label>
+                            <input
+                                type="number"
+                                max="300"
+                                min="0"
+                                value={duration}
+                                onChange={(e) => setDuration(e.target.value)}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">
                                 Questions
                             </label>
-                            <ul className="list-disc pl-5">
+                            <ol className="list-decimal pl-5" start="1">
                                 {questions.map((question, index) =>
                                     question && !question.error ? (
-                                        <>
-                                            <li key={index} className="mb-2">
-                                                <div className="flex flex-row justify-between items-center">
-                                                    <div className="font-bold">
-                                                        {question.question}
-                                                    </div>
-                                                    <button
-                                                        className="mt-0 text-xs text-white bg-red-500 hover:bg-red-700 px-2 py-1 rounded"
-                                                        onClick={() =>
-                                                            deleteQuestion(
-                                                                question.id
-                                                            )
-                                                        }
-                                                    >
-                                                        Delete
-                                                    </button>
+                                        <li key={index} className="mb-2">
+                                            <div className="flex flex-row justify-between items-center">
+                                                <div className="font-bold">
+                                                    <b>{question.question}</b> - ({question.points} point{question.points > 1 ? "s" : ""})
                                                 </div>
-                                                <ul className="list-disc pl-5">
-                                                    {question.options.map(
-                                                        (option, idx) => (
-                                                            <li key={idx}>
-                                                                {option}
-                                                            </li>
+                                                <button
+                                                    className="mt-0 text-xs text-white bg-red-500 hover:bg-red-700 px-2 py-1 rounded"
+                                                    onClick={() =>
+                                                        deleteQuestion(
+                                                            question.id
                                                         )
-                                                    )}
-                                                </ul>
-                                                <div className="italic">
-                                                    Answer:{" "}
-                                                    {question.answer.join(", ")}
-                                                </div>
-                                            </li>
-                                        </>
+                                                    }
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                            <ul className="list-disc pl-5">
+                                                {question.options.map(
+                                                    (option, idx) => (
+                                                        <li key={idx}>
+                                                            {option}
+                                                        </li>
+                                                    )
+                                                )}
+                                            </ul>
+                                            <div className="italic">
+                                                Answer:{" "}
+                                                {question.answer.join(", ")}
+                                            </div>
+                                        </li>
                                     ) : (
                                         <li
                                             key={index}
@@ -281,7 +343,7 @@ const EditQuiz = () => {
                                         </li>
                                     )
                                 )}
-                            </ul>
+                            </ol>
                         </div>
                         <div className="mt-8">
                             <button

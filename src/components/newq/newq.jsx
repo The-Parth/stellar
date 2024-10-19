@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { backendUrl } from "../../config";
@@ -8,6 +8,28 @@ const newQuestion = ({ quizId, user }) => {
     const [type, setType] = useState("single");
     const [options, setOptions] = useState([""]);
     const [answer, setAnswer] = useState([""]);
+    const [points, setPoints] = useState(1);
+
+    useEffect(() => {
+        if (!points) {
+            setPoints(1);
+        }
+        if (points < 1) {
+            setPoints(1);
+        }
+        if (points % 10 <= 7) {
+            if (points % 10 === 0) {
+                setPoints(1);
+            }
+            else {
+                setPoints(points%10);
+            }
+        }
+        if (points%10 > 7) {
+            setPoints(7);
+        } 
+    
+    }, [points]);
 
     const handleAddQuestion = async () => {
         try {
@@ -37,6 +59,7 @@ const newQuestion = ({ quizId, user }) => {
                     type,
                     options,
                     answer,
+                    points,
                 },
                 {
                     headers: {
@@ -91,6 +114,17 @@ const newQuestion = ({ quizId, user }) => {
                     <option value="single">Single Choice</option>
                     <option value="multiple">Multiple Choice</option>
                 </select>
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700">Points:</label>
+                <input
+                    type="number"
+                    value={points}
+                    onChange={(e) => setPoints(e.target.value)}
+                    className="w-full px-3 py-2 border rounded-lg"
+                    max={7}
+                    min={1}
+                />
             </div>
             <div className="mb-4">
                 <label className="block text-gray-700">Options:</label>

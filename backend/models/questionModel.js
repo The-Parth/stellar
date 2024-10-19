@@ -23,6 +23,11 @@ const questionSchema = new Schema({
         type: String,
         required: true
     },
+    points : {
+        type: Number,
+        required: false,
+        default: 1
+    }
 });
 
 const Question = mongoose.model('question', questionSchema);

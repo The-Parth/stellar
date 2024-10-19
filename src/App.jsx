@@ -12,7 +12,7 @@ import Logout from "./pages/login/logout";
 import Dashboard from "./pages/dashboard/dashboard";
 import CreateQuiz from "./pages/create_quiz/create";
 import EditQuiz from "./pages/create_quiz/edit";
-import PlayQuiz from "./pages/play/play";
+import PlayQuiz from "./pages/play/play2";
 import Explore from "./pages/explore/explore";
 
 import "./App.css";

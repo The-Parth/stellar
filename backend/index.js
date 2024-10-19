@@ -9,6 +9,8 @@ import quiz from "./routes/quiz.js";
 
 const app = express();
 
+const api_version = "api";
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,11 +20,18 @@ const Port = 3000;
 
 connectToMongo();
 
-app.use("/api/auth", auth);
-app.use("/api/user", user);
-app.use("/api/quiz", quiz);
+app.use(`/${api_version}/auth`, auth);
+app.use(`/${api_version}/user`, user);
+app.use(`/${api_version}/quiz`, quiz);
 
 
 app.listen(Port, () => {
   console.log("Server Started");
+});
+
+app.get("/", (req, res) => {
+  res.send({
+    app: "Stellar",
+    api_version
+  });
 });

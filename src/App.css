@@ -1,9 +1,18 @@
 @font-face {
-    font-family: "CustomFont";
+    font-family: "Main";
     src: url("/regular_main.ttf") format("truetype");
 }
+
+@font-face {
+    font-family: "Bold";
+    src: url("/bold_main.ttf") format("truetype");
+}
 :root {
-    font-family: "CustomFont", sans-serif !important;
+    font-family: "Main", sans-serif !important;
+}
+
+.bold {
+    font-family: "Bold", sans-serif !important;
 }
 
 .underline-animation {

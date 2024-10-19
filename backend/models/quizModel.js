@@ -37,6 +37,7 @@ const quizSchema = new Schema({
     duration: {
         type: Number,
         required: false,
+        default: 0, // in minutes, 0 means no time limit
     },
     difficulty: {
         type: String,
