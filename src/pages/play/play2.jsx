@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { FaRegClock } from "react-icons/fa6";
 import { backendUrl } from "../../config";
 
 import Navbar from "../../components/Navbar";
@@ -79,7 +79,6 @@ const PlayQuiz = () => {
                 },
             })
             .then((response) => {
-                console.log(response.data);
                 setScore(response.data.score);
                 navigate(`/result/${response.data.attemptId}`);
             })
@@ -94,14 +93,27 @@ const PlayQuiz = () => {
             return;
         }
         if (timer === 0) {
-            console.log("Time's up!");
+            handleSubmit();
+            return;
         }
         const interval = setInterval(() => {
-            console.log(timer);
-            setTimer(timer - 1);
+            setTimer((prev) => prev - 1);
         }, 1000);
         return () => clearInterval(interval);
     }, [timer]);
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    };
+
+    const timerComponent = (
+        <div className="flex items-center text-customBlue scale-150 font-bold">
+            <FaRegClock className="mr-2" />
+            <span>{formatTime(timer)}</span>
+        </div>
+    );
 
     // fetch quiz data by quizId from backendUrl/api/play/:quizId
     useEffect(() => {
@@ -126,7 +138,7 @@ const PlayQuiz = () => {
                     setTimeout(() => {
                         setLoading(false);
                         if (response.data.duration > 0) {
-                            setTimer(response.data.duration * 60);
+                            setTimer(response.data.duration * 10); // 10 for testing, should be 60 in prod
                         }
                     }, 1450);
                 })
@@ -143,10 +155,13 @@ const PlayQuiz = () => {
                 <>
                     <Navbar />
                     <div className="p-8">
-                        <h1 className="text-2xl font-bold mb-4 text-center">
-                            {quiz.title}
-                        </h1>
-                        <p className="text-lg mb-6 text-center">
+                        <div className="flex justify-between items-center mb-4">
+                            <h1 className="text-2xl font-bold text-left">
+                                {quiz.title}
+                            </h1>
+                            {timerComponent}
+                        </div>
+                        <p className="text-lg mb-6 text-left">
                             {quiz.description}
                         </p>
                         {quiz.questions.map((question, index) => (
