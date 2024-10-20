@@ -5,7 +5,6 @@ import axios from "axios";
 import { backendUrl } from "../../config";
 
 import Navbar from "../../components/Navbar";
-import e from "cors";
 
 const PlayQuiz = () => {
     const { quizId } = useParams();
@@ -17,20 +16,27 @@ const PlayQuiz = () => {
 
     const token = localStorage.getItem("token");
 
-    const handleOptionChange = (questionIndex, option, isMultiple = false, isChecked = true) => {
-
+    const handleOptionChange = (
+        questionIndex,
+        option,
+        isMultiple = false,
+        isChecked = true
+    ) => {
         const newQuestions = [...quiz.questions];
         const currentQuestion = newQuestions[questionIndex];
 
         if (!currentQuestion.selectedOptions) {
             currentQuestion.selectedOptions = [];
         }
-        
+
         if (isMultiple) {
             if (isChecked) {
                 currentQuestion.selectedOptions.push(option);
             } else {
-                currentQuestion.selectedOptions = currentQuestion.selectedOptions.filter((selectedOption) => selectedOption !== option);
+                currentQuestion.selectedOptions =
+                    currentQuestion.selectedOptions.filter(
+                        (selectedOption) => selectedOption !== option
+                    );
             }
         } else {
             currentQuestion.selectedOptions = [option];
@@ -119,68 +125,74 @@ const PlayQuiz = () => {
                                 <h2 className="text-xl mb-2">
                                     {question.question}
                                 </h2>
-                                {question.type === "single" ? (
-                                    <div>
-                                        {question.options.map((option, idx) => (
-                                            <div key={idx}>
-                                                <input
-                                                    type="radio"
-                                                    id={`q${index}o${idx}`}
-                                                    name={`question${index}`}
-                                                    value={option}
-                                                    onChange={(e) => {
-                                                        handleOptionChange(
-                                                            index,
-                                                            option,
-                                                            false,
-                                                            true
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
+                                    {question.options.map((option, idx) => (
+                                        <div
+                                            key={idx}
+                                            className={`p-4 border rounded cursor-pointer w-full max-w-xs ${
+                                                question.selectedOptions?.includes(
+                                                    option
+                                                )
+                                                    ? "bg-blue-500 text-white shadow-lg transform scale-105"
+                                                    : "border-blue-500"
+                                            }`}
+                                            style={{ maxWidth: "250px" }}
+                                            onClick={() => {
+                                                if (
+                                                    question.type ===
+                                                    "single"
+                                                ) {
+                                                    handleOptionChange(
+                                                        index,
+                                                        option,
+                                                        false,
+                                                        true
+                                                    );
+                                                } else {
+                                                    const isChecked =
+                                                        !question.selectedOptions?.includes(
+                                                            option
                                                         );
-                                                    }}
-                                                />
-                                                <label
-                                                    htmlFor={`q${index}o${idx}`}
-                                                >
-                                                    {option}
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div>
-                                        {question.options.map((option, idx) => (
-                                            <div key={idx}>
-                                                <input
-                                                    type="checkbox"
-                                                    id={`q${index}o${idx}`}
-                                                    name={`question${index}`}
-                                                    value={option}
-                                                    onChange={(e) => {
-                                                        if (e.target.checked) {
-                                                            handleOptionChange(
-                                                                index,
-                                                                option,
-                                                                true,
-                                                                true
-                                                            );
-                                                        } else {
-                                                            handleOptionChange(
-                                                                index,
-                                                                option,
-                                                                true,
-                                                                false
-                                                            );
-                                                        }
-                                                    }}
-                                                />
-                                                <label
-                                                    htmlFor={`q${index}o${idx}`}
-                                                >
-                                                    {option}
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                                    handleOptionChange(
+                                                        index,
+                                                        option,
+                                                        true,
+                                                        isChecked
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            <input
+                                                type={
+                                                    question.type === "single"
+                                                        ? "radio"
+                                                        : "checkbox"
+                                                }
+                                                id={`q${index}o${idx}`}
+                                                name={`question${index}`}
+                                                value={option}
+                                                checked={
+                                                    question.selectedOptions?.includes(
+                                                        option
+                                                    ) || false
+                                                }
+                                                onChange={() => {}}
+                                                className="hidden"
+                                            />
+                                            <label
+                                                htmlFor={`q${index}o${idx}`}
+                                                className="cursor-pointer flex items-center w-max h-max p-0 m-0"
+                                            >
+                                                <span className="inline-block w-6 h-6 mr-2 rounded-full border border-blue-500 flex items-center justify-center">
+                                                    {String.fromCharCode(
+                                                        65 + idx
+                                                    )}
+                                                </span>
+                                                {option}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         ))}
                         <button
@@ -197,17 +209,6 @@ const PlayQuiz = () => {
                     <div className="p-8 text-center text-xl text-customBlueDark">
                         Quiz is now loading... <br />
                         Please wait warmly and have some tea.
-                    </div>
-                    <div className="flex justify-center">
-                        <img
-                            src="https://64.media.tumblr.com/3c197c3b5ff6680e889317b993211add/71238fd72a401992-92/s400x600/b412ebae6f0edabaefda718f8898fb8a4a1b7155.png"
-                            alt="Reimu Hakurei from Touhou 6"
-                            style={{
-                                marginTop: "20px",
-                                width: "200px",
-                                height: "auto",
-                            }}
-                        />
                     </div>
                 </>
             )}

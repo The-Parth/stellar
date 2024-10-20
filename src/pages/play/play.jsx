@@ -57,6 +57,17 @@ const PlayQuiz = () => {
                         >
                             Try Again
                         </button>
+                        <div className="flex justify-center">
+                        <img
+                            src="https://64.media.tumblr.com/3c197c3b5ff6680e889317b993211add/71238fd72a401992-92/s400x600/b412ebae6f0edabaefda718f8898fb8a4a1b7155.png"
+                            alt="Reimu Hakurei from Touhou 6"
+                            style={{
+                                marginTop: "20px",
+                                width: "200px",
+                                height: "auto",
+                            }}
+                        />
+                    </div>
                     </div>
                 ) : (
                     <>
