@@ -32,6 +32,7 @@ router.get("/:quiz_id", fetchUser, async (req, res) => {
                 continue;
             }
 
+            question.answer = undefined;
             questions.push(question);
         }
 

@@ -40,4 +40,6 @@ const AttemptSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('Attempt', AttemptSchema);
+const Attempt = mongoose.model('attempt', AttemptSchema);
+
+export default Attempt;

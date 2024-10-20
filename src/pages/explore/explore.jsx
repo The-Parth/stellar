@@ -118,7 +118,7 @@ const Explore = () => {
                                 </div>
                                 
                                 <Link
-                                    to={`/play/${quiz.id}`}
+                                    to={`/play/${quiz.quiz_id}`}
                                     className="bottom-4 left-4 bg-blue-500 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded-md transition duration-150 ease-in-out"
                                 >
                                     Play Quiz
