@@ -117,14 +117,30 @@ const PlayQuiz = () => {
                 <>
                     <Navbar />
                     <div className="p-8">
-                        <h1 className="text-2xl font-bold mb-4">
+                        <h1 className="text-2xl font-bold mb-4 text-center">
                             {quiz.title}
                         </h1>
+                        <p className="text-lg mb-6 text-center">
+                            {quiz.description}
+                        </p>
                         {quiz.questions.map((question, index) => (
-                            <div key={index} className="mb-6">
-                                <h2 className="text-xl mb-2">
-                                    {question.question}
-                                </h2>
+                            <div key={index} className="mb-6 p-2">
+                                <div className="flex justify-between items-start p-3">
+                                    <div className="flex-1">
+                                        <h2 className="text-lg mb-1 font-semibold">
+                                            Q{index + 1}: {question.question}
+                                        </h2>
+                                        <p className="text-sm text-gray-500">
+                                            {question.type === "single"
+                                                ? "Single"
+                                                : "Multiple"}{" "}
+                                            choice
+                                        </p>
+                                    </div>
+                                    <span className="text-lg mb-1 font-regular w-32 text-right">
+                                        Points: {question.points}
+                                    </span>
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
                                     {question.options.map((option, idx) => (
                                         <div
@@ -133,14 +149,13 @@ const PlayQuiz = () => {
                                                 question.selectedOptions?.includes(
                                                     option
                                                 )
-                                                    ? "bg-blue-500 text-white shadow-lg transform scale-105"
-                                                    : "border-blue-500"
+                                                    ? "bg-customBlueLight text-white shadow-lg transform scale-105 transition-all duration-300"
+                                                    : "border-customBlueLight scale-100 transition-all duration-300 transform hover:shadow-lg hover:scale-105"
                                             }`}
                                             style={{ maxWidth: "250px" }}
                                             onClick={() => {
                                                 if (
-                                                    question.type ===
-                                                    "single"
+                                                    question.type === "single"
                                                 ) {
                                                     handleOptionChange(
                                                         index,
@@ -181,9 +196,23 @@ const PlayQuiz = () => {
                                             />
                                             <label
                                                 htmlFor={`q${index}o${idx}`}
-                                                className="cursor-pointer flex items-center w-max h-max p-0 m-0"
+                                                className={`cursor-pointer flex items-center w-max h-max p-0 m-0 ${
+                                                    question.selectedOptions?.includes(
+                                                        option
+                                                    )
+                                                        ? "font-bold"
+                                                        : ""
+                                                }`}
                                             >
-                                                <span className="inline-block w-6 h-6 mr-2 rounded-full border border-blue-500 flex items-center justify-center">
+                                                <span
+                                                    className={`w-6 h-6 mr-2 rounded-full border border-customBlueLight flex items-center justify-center ${
+                                                        question.selectedOptions?.includes(
+                                                            option
+                                                        )
+                                                            ? "border-white"
+                                                            : ""
+                                                    }`}
+                                                >
                                                     {String.fromCharCode(
                                                         65 + idx
                                                     )}
@@ -196,7 +225,7 @@ const PlayQuiz = () => {
                             </div>
                         ))}
                         <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded"
+                            className="bg-customBlue text-white px-4 py-2 rounded font-bold mx-auto block hover:bg-customBlueDark hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                             onClick={handleSubmit}
                         >
                             Submit Quiz
@@ -206,7 +235,7 @@ const PlayQuiz = () => {
             ) : (
                 <>
                     <Navbar />
-                    <div className="p-8 text-center text-xl text-customBlueDark">
+                    <div className="p-8 text-center text-xl text-customBlueLightDark">
                         Quiz is now loading... <br />
                         Please wait warmly and have some tea.
                     </div>
