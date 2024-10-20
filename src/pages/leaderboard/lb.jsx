@@ -31,11 +31,11 @@ const Leaderboard = () => {
     const getRankStyle = (rank) => {
         switch (rank) {
             case 1:
-                return "bg-yellow-400 text-white font-bold";
+                return "bg-yellow-400 text-yellow-800 font-bold";
             case 2:
-                return "bg-gray-300 text-white font-bold";
+                return "bg-gray-300 text-gray-600 font-bold";
             case 3:
-                return "bg-yellow-600 text-white font-bold";
+                return "bg-yellow-600 text-gray-800 font-bold";
             default:
                 return "bg-blue-100 text-black border-b border-gray-400";
         }
@@ -44,11 +44,11 @@ const Leaderboard = () => {
     const getRankIcon = (rank) => {
         switch (rank) {
             case 1:
-                return <FaCrown className="text-yellow-500" />;
+                return <FaCrown className="text-yellow-800" />;
             case 2:
-                return <FaMedal className="text-gray-400" />;
+                return <FaMedal className="text-gray-600" />;
             case 3:
-                return <FaMedal className="text-yellow-700" />;
+                return <FaMedal className="text-gray-800" />;
             default:
                 return rank;
         }

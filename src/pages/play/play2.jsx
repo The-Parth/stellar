@@ -11,6 +11,8 @@ const PlayQuiz = () => {
     const [quiz, setQuiz] = useState(null);
     const [score, setScore] = useState(0);
 
+    const [timer, setTimer] = useState(-1);
+
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
@@ -86,6 +88,21 @@ const PlayQuiz = () => {
             });
     };
 
+    // implement timer
+    useEffect(() => {
+        if (timer === -1) {
+            return;
+        }
+        if (timer === 0) {
+            console.log("Time's up!");
+        }
+        const interval = setInterval(() => {
+            console.log(timer);
+            setTimer(timer - 1);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [timer]);
+
     // fetch quiz data by quizId from backendUrl/api/play/:quizId
     useEffect(() => {
         if (!quizId) {
@@ -104,8 +121,13 @@ const PlayQuiz = () => {
                 })
                 .then((response) => {
                     setQuiz(response.data);
+                    console.log(response.data);
+
                     setTimeout(() => {
                         setLoading(false);
+                        if (response.data.duration > 0) {
+                            setTimer(response.data.duration * 60);
+                        }
                     }, 1450);
                 })
                 .catch((error) => {
@@ -149,14 +171,17 @@ const PlayQuiz = () => {
                                     {question.options.map((option, idx) => (
                                         <div
                                             key={idx}
-                                            className={`p-4 border rounded cursor-pointer w-full max-w-xs ${
-                                                question.selectedOptions?.includes(
-                                                    option
-                                                )
-                                                    ? "bg-customBlueLight text-white shadow-lg transform scale-105 transition-all duration-300"
-                                                    : "border-customBlueLight scale-100 transition-all duration-300 transform hover:shadow-lg hover:scale-105"
-                                            }`}
-                                            style={{ maxWidth: "250px" }}
+                                            className={`p-4 border rounded cursor-pointer break-words whitespace-pre-line relative w-full md:w-[300px]
+                ${
+                    question.selectedOptions?.includes(option)
+                        ? "bg-customBlueLight text-white shadow-lg transform scale-105 transition-all duration-300"
+                        : "border-customBlueLight scale-100 transition-all duration-300 transform hover:shadow-lg hover:scale-105"
+                }`}
+                                            style={{
+                                                maxWidth: "100%",
+                                                minWidth: "250px",
+                                                wordWrap: "break-word",
+                                            }} // Allow word wrapping and dynamic width
                                             onClick={() => {
                                                 if (
                                                     question.type === "single"
@@ -214,28 +239,28 @@ const PlayQuiz = () => {
 
                                             <label
                                                 htmlFor={`q${index}o${idx}`}
-                                                className={`cursor-pointer flex items-center w-max h-max p-0 m-0 ${
-                                                    question.selectedOptions?.includes(
-                                                        option
-                                                    )
-                                                        ? "font-bold"
-                                                        : ""
-                                                }`}
+                                                className={`cursor-pointer flex items-start w-full break-words whitespace-pre-line 
+                    ${
+                        question.selectedOptions?.includes(option)
+                            ? "font-bold"
+                            : ""
+                    }`}
                                             >
                                                 <span
-                                                    className={`w-6 h-6 mr-2 rounded-full border border-customBlueLight flex items-center justify-center ${
-                                                        question.selectedOptions?.includes(
-                                                            option
-                                                        )
-                                                            ? "border-white"
-                                                            : ""
-                                                    }`}
+                                                    className={`w-6 h-6 mr-2 rounded-full border border-customBlueLight flex items-center justify-center 
+                        ${
+                            question.selectedOptions?.includes(option)
+                                ? "border-white"
+                                : ""
+                        }`}
                                                 >
                                                     {String.fromCharCode(
                                                         65 + idx
                                                     )}
                                                 </span>
-                                                {option}
+                                                <div className="flex-1 break-words text-left">
+                                                    {option}
+                                                </div>
                                             </label>
                                         </div>
                                     ))}
@@ -256,6 +281,17 @@ const PlayQuiz = () => {
                     <div className="p-8 text-center text-xl text-customBlueLightDark">
                         Quiz is now loading... <br />
                         Please wait warmly and have some tea.
+                    </div>
+                    <div className="flex justify-center">
+                        <img
+                            src="https://64.media.tumblr.com/3c197c3b5ff6680e889317b993211add/71238fd72a401992-92/s400x600/b412ebae6f0edabaefda718f8898fb8a4a1b7155.png"
+                            alt="Reimu Hakurei from Touhou 6"
+                            style={{
+                                marginTop: "20px",
+                                width: "200px",
+                                height: "auto",
+                            }}
+                        />
                     </div>
                 </>
             )}
