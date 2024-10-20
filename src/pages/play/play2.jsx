@@ -71,12 +71,11 @@ const PlayQuiz = () => {
             .then((response) => {
                 console.log(response.data);
                 setScore(response.data.score);
-                
+                navigate(`/result/${response.data.attemptId}`);
             })
             .catch((error) => {
                 console.log(error);
             });
-
     };
 
     // fetch quiz data by quizId from backendUrl/api/play/:quizId
@@ -174,6 +173,19 @@ const PlayQuiz = () => {
                                                 }
                                             }}
                                         >
+                                            <div
+                                                style={{
+                                                    position: "absolute",
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    zIndex: 10,
+                                                    backgroundColor:
+                                                        "transparent",
+                                                }}
+                                            ></div>
+
                                             <input
                                                 type={
                                                     question.type === "single"
@@ -191,6 +203,7 @@ const PlayQuiz = () => {
                                                 onChange={() => {}}
                                                 className="hidden"
                                             />
+
                                             <label
                                                 htmlFor={`q${index}o${idx}`}
                                                 className={`cursor-pointer flex items-center w-max h-max p-0 m-0 ${

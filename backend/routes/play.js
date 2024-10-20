@@ -145,4 +145,19 @@ router.post("/:quiz_id", fetchUser, async (req, res) => {
     }
 });
 
+router.get("/attempt/:attempt_id", async (req, res) => {
+    const { attempt_id } = req.params;
+    try {
+        const attempt = await Attempts.findOne({ _id: attempt_id });
+        if (!attempt) {
+            return res.status(404).json({ error: "Attempt not found" });
+        }
+        res.status(200).json(attempt);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+);
+
 export default router;
