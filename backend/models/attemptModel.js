@@ -8,6 +8,12 @@ const AttemptSchema = new Schema({
         required : true
     },
 
+    isFirstAttempt: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+
     userId: {
         type: String,
         required: true
