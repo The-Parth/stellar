@@ -15,6 +15,9 @@ import EditQuiz from "./pages/create_quiz/edit";
 import PlayQuiz from "./pages/play/play2";
 import Explore from "./pages/explore/explore";
 import ResultPage from "./pages/play/result";
+import Leaderboard from "./pages/leaderboard/lb";
+
+import NotFoundPage from "./pages/404";
 
 import "./App.css";
 
@@ -39,6 +42,10 @@ const App = () => {
 
                         <Route path="/play/:quizId" element={<PlayQuiz />} />
                         <Route path="/result/:attemptId" element={<ResultPage />} />
+
+                        <Route path="/leaderboard/:quizId" element={<Leaderboard />} />
+
+                        <Route path="*" element={<NotFoundPage />} />
                         
                     </Routes>
                 </div>

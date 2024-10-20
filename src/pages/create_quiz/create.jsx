@@ -20,13 +20,14 @@ const CreateQuiz = () => {
     const [difficulty, setDifficulty] = useState("easy");
     const navigate = useNavigate();
 
+    const token = localStorage.getItem("token");
+
     // check if user is logged in
     useEffect(() => {
-        if (!user.token && !loading) {
-            console.log("User not logged in");
-            console.log(loading);
+        if (!token) {
+            navigate("/login");
         }
-    }, [user]);
+    }, [token]);
 
     const handleCreateQuiz = async () => {
         var start = new Date().getTime();
@@ -220,7 +221,8 @@ const CreateQuiz = () => {
                             href="/"
                             className="font-medium text-gray-300 hover:text-gray-400"
                         >
-                            By creating a quiz, you agree to our Terms of Service
+                            By creating a quiz, you agree to our Terms of
+                            Service
                         </a>
                     </p>
                 </div>

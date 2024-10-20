@@ -6,6 +6,7 @@ import Quiz from "../models/quizModel.js";
 import Question from "../models/questionModel.js";
 import User from "../models/userModel.js";
 import Attempts from "../models/attemptModel.js";
+import { title } from "process";
 
 const router = express.Router();
 
@@ -159,5 +160,42 @@ router.get("/attempt/:attempt_id", async (req, res) => {
     }
 }
 );
+
+router.get("/lb/:quiz_id", async (req, res) => {
+    const { quiz_id } = req.params;
+    try {
+        const quiz = await Quiz.findOne ({ quiz_id });
+        if (!quiz) {
+            return res.status(404).json({ error: "Quiz not found" });
+        }
+
+        const attempts = await Attempts.find({ quizId: quiz_id, isFirstAttempt: true }).sort({ finalScore: -1 }).limit(15);
+        const users = [];
+        for (const attempt of attempts) {
+            const user = await User.findOne({ _id: attempt.userId });
+            if (!user) {
+                continue;
+            }
+            users.push(
+                {
+                    username: user.username,
+                    score: attempt.finalScore,
+                }
+            );
+        }
+        res.status(200).json({
+            quiz_id,
+            title: quiz.title,
+            description: quiz.description,
+            leaderboard: users,
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+);
+
 
 export default router;

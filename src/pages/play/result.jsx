@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
 
@@ -7,6 +7,7 @@ import { backendUrl } from "../../config";
 
 const ResultPage = () => {
     const { attemptId } = useParams();
+    const navigate = useNavigate();
     const [score, setScore] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -29,8 +30,7 @@ const ResultPage = () => {
                 setQuiz(response.data);
                 setTimeout(() => {
                     setLoading(false);
-                }
-                , 1000);
+                }, 1000);
                 console.log(response.data);
             })
             .catch((error) => {
@@ -72,11 +72,15 @@ const ResultPage = () => {
                 fetchQuiz(response.data.quizId);
             } catch (err) {
                 setError(err.message);
-            } 
+            }
         };
 
         fetchScore();
     }, [attemptId]);
+
+    const handleGoToLeaderboard = () => {
+        navigate("/leaderboard/" + quiz.quiz_id);
+    };
 
     if (loading) {
         return (
@@ -101,6 +105,7 @@ const ResultPage = () => {
                 <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full -translate-y-12">
                     <h1 className="text-2xl font-bold mb-4 text-center">
                         Result for Attempt ID: {attemptId}
+                        {quiz && <span> on Quiz: {quiz.title}</span>}
                     </h1>
                     <p className="text-lg mb-2">
                         <span className="font-semibold">Your Score:</span>{" "}
@@ -117,6 +122,17 @@ const ResultPage = () => {
                                 : "Not First Attempt"}
                         </span>
                     </p>
+                    {quiz && (
+                        <p className="text-xs text-gray-300 text-center mt-4">
+                            Quiz ID: {quiz.quiz_id}
+                        </p>
+                    )}
+                    <button
+                        onClick={handleGoToLeaderboard}
+                        className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-full transition duration-300"
+                    >
+                        Go to Leaderboard
+                    </button>
                 </div>
             </div>
         </>

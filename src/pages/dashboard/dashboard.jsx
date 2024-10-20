@@ -395,6 +395,16 @@ const Dashboard = () => {
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation(); // Prevent the click from triggering the navigate
+                                            navigate(`/leaderboard/${q.quiz_id}`);
+                                        }
+                                        }
+                                        className="absolute bottom-4 left-4 bg-blue-600 text-white text-xs px-2 py-1 rounded-md hover:bg-blue-700 transition duration-150 ease-in-out translate-y-1"
+                                    >
+                                        Leaderboard
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent the click from triggering the navigate
                                             handleDelete(q.quiz_id);
                                         }}
                                         className="absolute bottom-4 right-4 bg-red-600 text-white text-xs px-2 py-1 rounded-md hover:bg-red-700 transition duration-150 ease-in-out translate-y-1"

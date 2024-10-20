@@ -16,6 +16,14 @@ const PlayQuiz = () => {
 
     const token = localStorage.getItem("token");
 
+    if (!quizId) {
+        navigate("/explore");
+    }
+
+    if (!token) {
+        navigate("/login");
+    }
+
     const handleOptionChange = (
         questionIndex,
         option,
