@@ -1,51 +1,37 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
 const AttemptSchema = new Schema({
     quizId: {
-        type : String,
-        required : true
+        type: String,
+        required: true,
     },
 
     isFirstAttempt: {
         type: Boolean,
         required: true,
-        default: true
+        default: true,
     },
 
     userId: {
         type: String,
-        required: true
+        required: true,
     },
-    answers: [{
-        questionId: {
-            type: String,
-            required: true
-        },
-        selectedOption: {
-            type: Array,
-            required: true
-        },
-        isCorrect: {
-            type: Boolean,
-            required: true
-        },
-        score: {
-            type: Number,
-            required: true
-        }
-    }],
+    answers: {
+        type: Array,
+        required: true,
+    },
     finalScore: {
         type: Number,
-        required: true
+        required: true,
     },
     attemptedAt: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+    },
 });
 
-const Attempt = mongoose.model('attempt', AttemptSchema);
+const Attempt = mongoose.model("attempt", AttemptSchema);
 
 export default Attempt;

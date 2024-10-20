@@ -43,7 +43,6 @@ const PlayQuiz = () => {
         }
 
         newQuestions[questionIndex] = currentQuestion;
-        console.log(newQuestions);
         setQuiz({
             ...quiz,
             questions: newQuestions,
@@ -60,7 +59,6 @@ const PlayQuiz = () => {
                 };
             }),
         };
-        console.log(responseObject);
 
         // post to backendUrl/api/play/:quizId
         axios
@@ -73,12 +71,12 @@ const PlayQuiz = () => {
             .then((response) => {
                 console.log(response.data);
                 setScore(response.data.score);
+                
             })
             .catch((error) => {
                 console.log(error);
             });
 
-        return;
     };
 
     // fetch quiz data by quizId from backendUrl/api/play/:quizId
@@ -102,7 +100,6 @@ const PlayQuiz = () => {
                     setTimeout(() => {
                         setLoading(false);
                     }, 1450);
-                    console.log(response.data);
                 })
                 .catch((error) => {
                     console.log(error);

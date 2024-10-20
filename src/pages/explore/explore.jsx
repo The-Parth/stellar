@@ -60,7 +60,7 @@ const Explore = () => {
                         {quizzes.map((quiz) => (
                             <div
                                 key={quiz.id}
-                                className="relative border p-4 rounded-md shadow-sm bg-white hover:shadow-lg transition duration-150 ease-in-out"
+                                className="relative border p-4 m-4 rounded-md shadow-sm bg-white hover:shadow-lg transition duration-150 ease-in-out hover:shadow-blue-200"
                             >
                                 <div className="flex flex-row md:justify-between">
                                     <div>
@@ -71,13 +71,22 @@ const Explore = () => {
                                             {quiz.description}
                                         </p>
                                         <p className="text-sm text-gray-600">
-                                            {quiz.questions.length} questions
+                                            {quiz.questions} questions
                                         </p>
                                         <p className="text-sm text-gray-600">
                                             Author: {quiz.author}
                                         </p>
                                         <p className="text-sm text-gray-600">
-                                            Duration: {quiz.duration} minutes
+                                            Duration:{" "}
+                                            {quiz.duration > 0 ? (
+                                                <span className="text-red-600">
+                                                    {quiz.duration} minutes
+                                                </span>
+                                            ) : (
+                                                <span className="text-customBlueLight">
+                                                    No time limit
+                                                </span>
+                                            )}
                                         </p>
                                     </div>
 
@@ -116,14 +125,17 @@ const Explore = () => {
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <Link
-                                    to={`/play/${quiz.quiz_id}`}
-                                    className="bottom-4 left-4 bg-blue-500 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded-md transition duration-150 ease-in-out"
-                                >
-                                    Play Quiz
-                                </Link>
-                                
+
+                                <div className="flex justify-center items-center">
+                                    <Link
+                                        to={`/play/${quiz.quiz_id}`}
+                                        className="bg-blue-500 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded-md transition duration-150 ease-in-out hover:scale-110"
+                                    >
+                                        <span className="text-lg font-bold m-4">
+                                            Play Quiz
+                                        </span>
+                                    </Link>
+                                </div>
                             </div>
                         ))}
                         <div className="my-4">

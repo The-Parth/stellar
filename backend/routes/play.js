@@ -56,8 +56,6 @@ router.post("/:quiz_id", fetchUser, async (req, res) => {
         return res.status(400).json({ error: "Some sorcery is going on" });
     }
 
-    console.log(answers);
-
     try {
         const quiz = await Quiz.findOne({ quiz_id });
 
@@ -102,20 +100,49 @@ router.post("/:quiz_id", fetchUser, async (req, res) => {
                 });
 
                 // check if all correct answers are selected, and no incorrect answer is selected
-                if (correctCount === correct.length && correctCount === qa.length) {
-
+                if (
+                    correctCount === correct.length &&
+                    correctCount === qa.length
+                ) {
                     score = question.points;
                 }
             }
             finalScore += score;
         });
 
-        console.log(12);
+        console.log(finalScore);
 
-        // send the final score
-        res.status(200).json({ finalScore });
+        // check if the user has already attempted the quiz
+        Attempts.findOne({ quizId: quiz_id, userId: req.user.id }).then(
+            (attempt) => {
+                let firstAttempt = false;
+                if (!attempt) {
+                    firstAttempt = true;
+                }
 
-    } catch (error) {}
+                const newAttempt = new Attempts({
+                    quizId: quiz_id,
+                    userId: req.user.id,
+                    answers: answers,
+                    finalScore: finalScore ? finalScore : 0,
+                    isFirstAttempt: firstAttempt,
+                });
+
+                console.log(newAttempt);
+
+                newAttempt.save().then((attempt) => {
+                    res.json({
+                        message: "Attempt recorded succesfully",
+                        attempt: newAttempt,
+                        attemptId: newAttempt._id,
+                    });
+                });
+            }
+        );
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Server Error" });
+    }
 });
 
 export default router;
