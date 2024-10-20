@@ -6,6 +6,7 @@ import connectToMongo from "./db.js";
 import auth from "./routes/auth.js";
 import user from "./routes/user.js";
 import quiz from "./routes/quiz.js";
+import play from "./routes/play.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ connectToMongo();
 app.use(`/${api_version}/auth`, auth);
 app.use(`/${api_version}/user`, user);
 app.use(`/${api_version}/quiz`, quiz);
+app.use(`/${api_version}/play`, play);
 
 
 app.listen(Port, () => {

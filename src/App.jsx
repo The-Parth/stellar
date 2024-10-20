@@ -14,6 +14,7 @@ import CreateQuiz from "./pages/create_quiz/create";
 import EditQuiz from "./pages/create_quiz/edit";
 import PlayQuiz from "./pages/play/play2";
 import Explore from "./pages/explore/explore";
+import ResultPage from "./pages/play/result";
 
 import "./App.css";
 
@@ -37,6 +38,7 @@ const App = () => {
                         <Route path="/edit_quiz/:quizId" element={<EditQuiz />} />
 
                         <Route path="/play/:quizId" element={<PlayQuiz />} />
+                        <Route path="/result/:attemptId" element={<ResultPage />} />
                         
                     </Routes>
                 </div>

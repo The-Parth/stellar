@@ -1,101 +1,256 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { backendUrl } from "../../config";
+
 import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import Countdown from 'react-countdown';
 
 const PlayQuiz = () => {
+    const { quizId } = useParams();
+    const [quiz, setQuiz] = useState(null);
     const [score, setScore] = useState(0);
-    const [showScore, setShowScore] = useState(false);
-    const [selectedAnswers, setSelectedAnswers] = useState({});
 
-    const questions = [
-        {
-            questionText: 'What is the capital of France?',
-            answerOptions: [
-                { answerText: 'New York', isCorrect: false },
-                { answerText: 'London', isCorrect: false },
-                { answerText: 'Paris', isCorrect: true },
-                { answerText: 'Dublin', isCorrect: false },
-            ],
-        },
-        {
-            questionText: 'Who is CEO of Tesla?',
-            answerOptions: [
-                { answerText: 'Jeff Bezos', isCorrect: false },
-                { answerText: 'Elon Musk', isCorrect: true },
-                { answerText: 'Bill Gates', isCorrect: false },
-                { answerText: 'Tony Stark', isCorrect: false },
-            ],
-        },
-        // Add more questions as needed
-    ];
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
-    const handleAnswerOptionClick = (questionIndex, answerIndex) => {
-        setSelectedAnswers({
-            ...selectedAnswers,
-            [questionIndex]: answerIndex,
+    const token = localStorage.getItem("token");
+
+    const handleOptionChange = (
+        questionIndex,
+        option,
+        isMultiple = false,
+        isChecked = true
+    ) => {
+        const newQuestions = [...quiz.questions];
+        const currentQuestion = newQuestions[questionIndex];
+
+        if (!currentQuestion.selectedOptions) {
+            currentQuestion.selectedOptions = [];
+        }
+
+        if (isMultiple) {
+            if (isChecked) {
+                currentQuestion.selectedOptions.push(option);
+            } else {
+                currentQuestion.selectedOptions =
+                    currentQuestion.selectedOptions.filter(
+                        (selectedOption) => selectedOption !== option
+                    );
+            }
+        } else {
+            currentQuestion.selectedOptions = [option];
+        }
+
+        newQuestions[questionIndex] = currentQuestion;
+        setQuiz({
+            ...quiz,
+            questions: newQuestions,
         });
     };
 
     const handleSubmit = () => {
-        let newScore = 0;
-        questions.forEach((question, questionIndex) => {
-            if (question.answerOptions[selectedAnswers[questionIndex]]?.isCorrect) {
-                newScore += 1;
-            }
-        });
-        setScore(newScore);
-        setShowScore(true);
+        var responseObject = {
+            quizId: quizId,
+            answers: quiz.questions.map((question) => {
+                return {
+                    questionId: question.id,
+                    answers: question.selectedOptions,
+                };
+            }),
+        };
+
+        // post to backendUrl/api/play/:quizId
+        axios
+            .post(`${backendUrl}/api/play/${quizId}`, responseObject, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": token,
+                },
+            })
+            .then((response) => {
+                console.log(response.data);
+                setScore(response.data.score);
+                navigate(`/result/${response.data.attemptId}`);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
+
+    // fetch quiz data by quizId from backendUrl/api/play/:quizId
+    useEffect(() => {
+        if (!quizId) {
+            return;
+        }
+        if (!token) {
+            navigate("/login");
+        }
+        const fetchQuiz = () => {
+            axios
+                .get(`${backendUrl}/api/play/${quizId}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "auth-token": token,
+                    },
+                })
+                .then((response) => {
+                    setQuiz(response.data);
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 1450);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        };
+        fetchQuiz();
+    }, [quizId]);
 
     return (
         <>
-        <Navbar />
-        <div className='min-h-screen flex items-center justify-center bg-gray-100'>
-            <div className='bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl'>
-                {showScore ? (
-                    <div className='text-center'>
-                        <div className='text-2xl font-bold mb-4'>You scored {score} out of {questions.length}</div>
-                        <button
-                            className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700'
-                            onClick={() => setShowScore(false)}
-                        >
-                            Try Again
-                        </button>
-                    </div>
-                ) : (
-                    <>
-                        <div className='text-2xl font-bold text-[#646cff]'>Time Remaining: <Countdown date={Date.now() + 300000} /></div>
-                        {questions.map((question, questionIndex) => (
-                            <div key={questionIndex} className='mb-6'>
-                                <div className='text-lg font-semibold mb-2'>
-                                    <span>Question {questionIndex + 1}</span>/{questions.length}
+            {quiz && !loading ? (
+                <>
+                    <Navbar />
+                    <div className="p-8">
+                        <h1 className="text-2xl font-bold mb-4 text-center">
+                            {quiz.title}
+                        </h1>
+                        <p className="text-lg mb-6 text-center">
+                            {quiz.description}
+                        </p>
+                        {quiz.questions.map((question, index) => (
+                            <div key={index} className="mb-6 p-2">
+                                <div className="flex justify-between items-start p-3">
+                                    <div className="flex-1">
+                                        <h2 className="text-lg mb-1 font-semibold">
+                                            Q{index + 1}: {question.question}
+                                        </h2>
+                                        <p className="text-sm text-gray-500">
+                                            {question.type === "single"
+                                                ? "Single"
+                                                : "Multiple"}{" "}
+                                            choice
+                                        </p>
+                                    </div>
+                                    <span className="text-lg mb-1 font-regular w-32 text-right">
+                                        Points: {question.points}
+                                    </span>
                                 </div>
-                                <div className='text-xl mb-4'>{question.questionText}</div>
-                                <div className='grid grid-cols-2 gap-4'>
-                                    {question.answerOptions.map((answerOption, answerIndex) => (
-                                        <button
-                                            key={answerIndex}
-                                            className={`px-4 py-2 border rounded ${selectedAnswers[questionIndex] === answerIndex ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                                            onClick={() => handleAnswerOptionClick(questionIndex, answerIndex)}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
+                                    {question.options.map((option, idx) => (
+                                        <div
+                                            key={idx}
+                                            className={`p-4 border rounded cursor-pointer w-full max-w-xs ${
+                                                question.selectedOptions?.includes(
+                                                    option
+                                                )
+                                                    ? "bg-customBlueLight text-white shadow-lg transform scale-105 transition-all duration-300"
+                                                    : "border-customBlueLight scale-100 transition-all duration-300 transform hover:shadow-lg hover:scale-105"
+                                            }`}
+                                            style={{ maxWidth: "250px" }}
+                                            onClick={() => {
+                                                if (
+                                                    question.type === "single"
+                                                ) {
+                                                    handleOptionChange(
+                                                        index,
+                                                        option,
+                                                        false,
+                                                        true
+                                                    );
+                                                } else {
+                                                    const isChecked =
+                                                        !question.selectedOptions?.includes(
+                                                            option
+                                                        );
+                                                    handleOptionChange(
+                                                        index,
+                                                        option,
+                                                        true,
+                                                        isChecked
+                                                    );
+                                                }
+                                            }}
                                         >
-                                            {answerOption.answerText}
-                                        </button>
+                                            <div
+                                                style={{
+                                                    position: "absolute",
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    zIndex: 10,
+                                                    backgroundColor:
+                                                        "transparent",
+                                                }}
+                                            ></div>
+
+                                            <input
+                                                type={
+                                                    question.type === "single"
+                                                        ? "radio"
+                                                        : "checkbox"
+                                                }
+                                                id={`q${index}o${idx}`}
+                                                name={`question${index}`}
+                                                value={option}
+                                                checked={
+                                                    question.selectedOptions?.includes(
+                                                        option
+                                                    ) || false
+                                                }
+                                                onChange={() => {}}
+                                                className="hidden"
+                                            />
+
+                                            <label
+                                                htmlFor={`q${index}o${idx}`}
+                                                className={`cursor-pointer flex items-center w-max h-max p-0 m-0 ${
+                                                    question.selectedOptions?.includes(
+                                                        option
+                                                    )
+                                                        ? "font-bold"
+                                                        : ""
+                                                }`}
+                                            >
+                                                <span
+                                                    className={`w-6 h-6 mr-2 rounded-full border border-customBlueLight flex items-center justify-center ${
+                                                        question.selectedOptions?.includes(
+                                                            option
+                                                        )
+                                                            ? "border-white"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    {String.fromCharCode(
+                                                        65 + idx
+                                                    )}
+                                                </span>
+                                                {option}
+                                            </label>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
                         ))}
                         <button
-                            className='mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700'
+                            className="bg-customBlue text-white px-4 py-2 rounded font-bold mx-auto block hover:bg-customBlueDark hover:shadow-lg transform hover:scale-105 transition-all duration-300"
                             onClick={handleSubmit}
                         >
-                            Submit
+                            Submit Quiz
                         </button>
-                    </>
-                )}
-            </div>
-        </div>
-        <Footer />
+                    </div>
+                </>
+            ) : (
+                <>
+                    <Navbar />
+                    <div className="p-8 text-center text-xl text-customBlueLightDark">
+                        Quiz is now loading... <br />
+                        Please wait warmly and have some tea.
+                    </div>
+                </>
+            )}
         </>
     );
 };
