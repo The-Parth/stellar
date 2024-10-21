@@ -1,3 +1,3 @@
-const backendUrl = 'http://localhost:3000';
+const backendUrl = 'https://stellar-quiz-backend.vercel.app';
 
 export { backendUrl };
