@@ -8,7 +8,7 @@ import Star from "../../../assets/star.svg";
 import Navbar from "../../components/Navbar";
 import "./styles/home.css";
 
-var offset_array = [
+var offset_array2 = [
     {
         x: 99.8314972205186,
         y: 97.17744239237366,
@@ -220,9 +220,9 @@ var offset_array = [
         height: 5.54200656272328,
     },
 ];
-var offset_array2 = [];
+var offset_array = [];
 const Home = () => {
-    const fixed_offset_provided = true;
+    const fixed_offset_provided = false;
     return (
         <>
             <Navbar />

@@ -50,8 +50,7 @@ const Explore = () => {
             <div className="p-8">
                 <h1 className="text-4xl font-bold mb-4">Explore Page</h1>
                 <p className="text-lg">
-                    Welcome to the explore page. Here you can find various
-                    resources and information.
+                    Welcome to the explore page. Find quizzes made by our community
                 </p>
                 {loading ? (
                     <p>Loading...</p>
