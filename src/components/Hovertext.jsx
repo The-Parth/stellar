@@ -27,7 +27,7 @@
 // export default Hovertext;
 
 import React from 'react';
-import './styles/hovertext.css';
+import './styles/Hovertext.css';
 
 const Hovertext = ({ text }) => {
   return (
